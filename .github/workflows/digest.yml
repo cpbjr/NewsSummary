@@ -1,0 +1,59 @@
+name: News Digest
+
+on:
+  schedule:
+    # 5 AM EST = 10:00 UTC
+    - cron: '0 10 * * *'
+    # 7 PM EST = 00:00 UTC (midnight)
+    - cron: '0 0 * * *'
+  workflow_dispatch:
+    inputs:
+      digest_type:
+        description: 'Digest type (morning/evening)'
+        required: false
+        default: 'morning'
+
+jobs:
+  send-digest:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Determine digest type
+        id: digest
+        run: |
+          HOUR=$(TZ='America/New_York' date +%H)
+          if [ "${{ github.event.inputs.digest_type }}" != "" ]; then
+            echo "type=${{ github.event.inputs.digest_type }}" >> $GITHUB_OUTPUT
+          elif [ $HOUR -lt 12 ]; then
+            echo "type=morning" >> $GITHUB_OUTPUT
+          else
+            echo "type=evening" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Run aggregator
+        env:
+          EMAIL_HOST: ${{ secrets.EMAIL_HOST }}
+          EMAIL_PORT: ${{ secrets.EMAIL_PORT }}
+          EMAIL_USER: ${{ secrets.EMAIL_USER }}
+          EMAIL_PASS: ${{ secrets.EMAIL_PASS }}
+          EMAIL_TO: ${{ secrets.EMAIL_TO }}
+        run: python src/aggregator.py ${{ steps.digest.outputs.type }}
+
+      - name: Upload digest artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: digest-${{ steps.digest.outputs.type }}-${{ github.run_id }}
+          path: digest.html
+          if-no-files-found: ignore

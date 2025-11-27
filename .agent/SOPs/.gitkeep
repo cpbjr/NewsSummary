@@ -1,0 +1,11 @@
+# SOPs Directory
+
+This directory contains Standard Operating Procedures for common tasks.
+
+**Examples:**
+- "How to add a database migration"
+- "How to deploy to production"
+- "How to test API endpoints"
+
+SOPs are created as needed when repeatable procedures are discovered.
+This directory can remain empty initially.

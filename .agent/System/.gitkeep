@@ -1,0 +1,11 @@
+# System Directory
+
+This directory documents the current state of the project.
+
+**Typical files:**
+- `tech-stack.md` - Technologies and architecture
+- `database-schema.md` - Database schema and migrations
+- `integrations.md` - External APIs and services
+- `project-structure.md` - Directory layout
+
+Create files as needed for your project.
