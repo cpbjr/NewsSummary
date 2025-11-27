@@ -1,127 +1,51 @@
 # RSS Feeds Configuration
-# Simple format for the custom aggregator
+# Simplified personal news digest
 
 settings:
-  max_articles_per_digest: 50
-  max_per_category: 12
+  max_articles_per_digest: 30
+  max_per_category: 10
   dedup_similarity: 0.85
   timezone: "America/New_York"
 
 feeds:
-  # === FINANCIAL ===
+  # === FINANCE/ECONOMICS ===
   - name: "ZeroHedge"
     url: "https://www.zerohedge.com/fullrss.xml"
     category: "finance"
-    max_articles: 3
-
-  - name: "Reuters Business"
-    url: "https://www.reutersagency.com/feed/?best-topics=business-finance"
-    category: "finance"
-
-  - name: "NPR Business"
-    url: "https://feeds.npr.org/1006/rss.xml"
-    category: "finance"
-
-  - name: "BBC Business"
-    url: "https://feeds.bbci.co.uk/news/business/rss.xml"
-    category: "finance"
-
-  # === POLITICAL ===
-  - name: "Politico"
-    url: "https://www.politico.com/rss/politicopicks.xml"
-    category: "politics"
-
-  - name: "Politico Congress"
-    url: "https://rss.politico.com/congress.xml"
-    category: "politics"
-
-  - name: "NPR Politics"
-    url: "https://feeds.npr.org/1014/rss.xml"
-    category: "politics"
-
-  - name: "The Hill"
-    url: "https://thehill.com/feed/"
-    category: "politics"
-
-  - name: "BBC US & Canada"
-    url: "https://feeds.bbci.co.uk/news/world/us_and_canada/rss.xml"
-    category: "politics"
-
-  - name: "Drudge Report"
-    url: "https://feedpress.me/drudgereportfeed"
-    category: "politics"
 
   # === GENERAL NEWS ===
   - name: "Axios"
     url: "https://www.axios.com/feeds/feed.rss"
     category: "general"
 
-  - name: "NPR National"
-    url: "https://feeds.npr.org/1003/rss.xml"
-    category: "general"
-
-  - name: "BBC World"
-    url: "https://feeds.bbci.co.uk/news/world/rss.xml"
-    category: "world"
-
-  # === TECHNOLOGY ===
-  - name: "TechCrunch AI"
-    url: "https://techcrunch.com/category/artificial-intelligence/feed/"
-    category: "tech"
-
-  - name: "TechCrunch Startups"
-    url: "https://techcrunch.com/category/startups/feed/"
-    category: "tech"
-
-  - name: "Hacker News"
-    url: "https://hnrss.org/frontpage"
-    category: "tech"
-
-  - name: "BBC Technology"
-    url: "https://feeds.bbci.co.uk/news/technology/rss.xml"
-    category: "tech"
+  # === POLITICS ===
+  - name: "The Federalist"
+    url: "https://thefederalist.com/feed/"
+    category: "politics"
 
   # === SPORTS ===
-  - name: "ESPN NFL"
-    url: "https://www.espn.com/espn/rss/nfl/news"
+  - name: "Dodgers Nation"
+    url: "https://dodgersnation.com/feed/"
     category: "sports"
 
-  - name: "ESPN NBA"
-    url: "https://www.espn.com/espn/rss/nba/news"
-    category: "sports"
-
-  - name: "ESPN MLB"
-    url: "https://www.espn.com/espn/rss/mlb/news"
-    category: "sports"
+  # === AI/TECH ===
+  - name: "The Verge AI"
+    url: "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml"
+    category: "tech"
 
 keywords:
-  # Priority teams (must include)
-  priority:
-    - "Chargers"
-    - "Dodgers"
-    - "Rams"
-    - "Clippers"
-    - "Angels"
-    - "USC"
-
   # Interests (boost ranking)
   interests:
     - "AI"
+    - "OpenAI"
+    - "Anthropic"
+    - "Claude"
+    - "GPT"
+    - "Dodgers"
     - "Federal Reserve"
     - "interest rate"
-    - "Congress"
-    - "Supreme Court"
-    - "startup"
-    - "IPO"
-    - "merger"
-    - "acquisition"
 
   # Exclusions (filter out)
   exclude:
-    - "tutorial"
-    - "course"
-    - "rumor"
-    - "gossip"
-    - "fantasy sports"
-    - "prediction"
-    - "horoscope"
+    - "sponsored"
+    - "advertisement"
