@@ -194,6 +194,36 @@
                         oninput="document.getElementById('zerohedgeValue').textContent = this.value"
                     >
                 </div>
+
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">
+                        Federalist: <span id="federalistValue" class="text-blue-600">{{ settings.category_limits.federalist or 10 }}</span>
+                    </label>
+                    <input
+                        type="range"
+                        id="federalistLimit"
+                        min="0"
+                        max="30"
+                        value="{{ settings.category_limits.federalist or 10 }}"
+                        class="w-full"
+                        oninput="document.getElementById('federalistValue').textContent = this.value"
+                    >
+                </div>
+
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">
+                        Dodgers: <span id="dodgersValue" class="text-blue-600">{{ settings.category_limits.dodgers or 10 }}</span>
+                    </label>
+                    <input
+                        type="range"
+                        id="dodgersLimit"
+                        min="0"
+                        max="30"
+                        value="{{ settings.category_limits.dodgers or 10 }}"
+                        class="w-full"
+                        oninput="document.getElementById('dodgersValue').textContent = this.value"
+                    >
+                </div>
             </div>
         </div>
 
@@ -234,7 +264,9 @@ document.getElementById('settingsForm').addEventListener('submit', async (e) => 
             sports: parseInt(document.getElementById('sportsLimit').value),
             general: parseInt(document.getElementById('generalLimit').value),
             world: parseInt(document.getElementById('worldLimit').value),
-            zerohedge: parseInt(document.getElementById('zerohedgeLimit').value)
+            zerohedge: parseInt(document.getElementById('zerohedgeLimit').value),
+            federalist: parseInt(document.getElementById('federalistLimit').value),
+            dodgers: parseInt(document.getElementById('dodgersLimit').value)
         }
     };
 

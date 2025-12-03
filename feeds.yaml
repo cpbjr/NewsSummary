@@ -5,29 +5,41 @@ settings:
   timezone: America/New_York
   category_limits:
     zerohedge: 10
+    federalist: 10
+    dodgers: 10
     finance: 12
     politics: 10
     tech: 15
     sports: 8
     general: 10
-    world: 8
 feeds:
+# Individual Feed Categories (shown first in digest)
 - name: ZeroHedge
   url: https://www.zerohedge.com/fullrss.xml
   category: zerohedge
+  weight: 1.0
+- name: The Federalist
+  url: https://thefederalist.com/feed/
+  category: federalist
+  weight: 1.0
+
+# General Categories (multiple feeds per category)
 - name: Axios
   url: https://www.axios.com/feeds/feed.rss
   category: general
-  weight: 0.7
-- name: The Federalist
-  url: https://thefederalist.com/feed/
-  category: politics
-- name: Dodgers Nation
-  url: https://dodgersnation.com/feed/
-  category: sports
+  weight: 1.0
+- name: MacDailyNews
+  url: https://macdailynews.com/feed/
+  category: tech
+  weight: 1.2
 - name: The Verge AI
   url: https://www.theverge.com/rss/ai-artificial-intelligence/index.xml
   category: tech
+  weight: 1.0
+- name: Dodgers Nation
+  url: https://dodgersnation.com/feed/
+  category: sports
+  weight: 1.5
 keywords:
   exclude:
   - sponsored

@@ -94,7 +94,7 @@ def deduplicate(articles: list, threshold: float = 0.85) -> list:
 
 
 def filter_articles(articles: list, keywords: dict) -> list:
-    """Filter articles based on keyword rules."""
+    """Filter articles based on keyword rules and recategorize based on keywords."""
     filtered = []
 
     exclude_patterns = [re.compile(re.escape(kw), re.IGNORECASE)
@@ -104,12 +104,19 @@ def filter_articles(articles: list, keywords: dict) -> list:
     priority_patterns = [re.compile(re.escape(kw), re.IGNORECASE)
                          for kw in keywords.get("priority", [])]
 
+    # Special keyword-based categories
+    dodgers_pattern = re.compile(r'dodgers?', re.IGNORECASE)
+
     for article in articles:
         text = f"{article['title']} {article['summary']}"
 
         # Skip if matches exclusion
         if any(p.search(text) for p in exclude_patterns):
             continue
+
+        # Recategorize based on special keywords
+        if dodgers_pattern.search(text):
+            article["category"] = "dodgers"
 
         # Calculate score
         score = 0
@@ -169,17 +176,19 @@ def format_html_digest(grouped: dict, digest_name: str) -> str:
 """
 
     category_labels = {
+        "zerohedge": "ZeroHedge",
+        "federalist": "The Federalist",
+        "dodgers": "Dodgers Nation",
         "finance": "Finance & Markets",
         "politics": "Politics",
         "tech": "Technology",
         "sports": "Sports",
         "general": "General News",
         "world": "World News",
-        "zerohedge": "ZeroHedge",
     }
 
-    # Sort categories
-    cat_order = ["zerohedge", "finance", "politics", "tech", "general", "world", "sports"]
+    # Sort categories (individual feeds first, then general categories)
+    cat_order = ["zerohedge", "federalist", "dodgers", "finance", "politics", "tech", "general", "world", "sports"]
 
     for cat in cat_order:
         if cat not in grouped:
