@@ -1,51 +1,35 @@
-# RSS Feeds Configuration
-# Simplified personal news digest
-
 settings:
   max_articles_per_digest: 30
   max_per_category: 10
   dedup_similarity: 0.85
-  timezone: "America/New_York"
-
+  timezone: America/New_York
 feeds:
-  # === FINANCE/ECONOMICS ===
-  - name: "ZeroHedge"
-    url: "https://www.zerohedge.com/fullrss.xml"
-    category: "finance"
-
-  # === GENERAL NEWS ===
-  - name: "Axios"
-    url: "https://www.axios.com/feeds/feed.rss"
-    category: "general"
-
-  # === POLITICS ===
-  - name: "The Federalist"
-    url: "https://thefederalist.com/feed/"
-    category: "politics"
-
-  # === SPORTS ===
-  - name: "Dodgers Nation"
-    url: "https://dodgersnation.com/feed/"
-    category: "sports"
-
-  # === AI/TECH ===
-  - name: "The Verge AI"
-    url: "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml"
-    category: "tech"
-
+- name: ZeroHedge
+  url: https://www.zerohedge.com/fullrss.xml
+  category: finance
+- name: Axios
+  url: https://www.axios.com/feeds/feed.rss
+  category: general
+  weight: 0.7
+- name: The Federalist
+  url: https://thefederalist.com/feed/
+  category: politics
+- name: Dodgers Nation
+  url: https://dodgersnation.com/feed/
+  category: sports
+- name: The Verge AI
+  url: https://www.theverge.com/rss/ai-artificial-intelligence/index.xml
+  category: tech
 keywords:
-  # Interests (boost ranking)
   interests:
-    - "AI"
-    - "OpenAI"
-    - "Anthropic"
-    - "Claude"
-    - "GPT"
-    - "Dodgers"
-    - "Federal Reserve"
-    - "interest rate"
-
-  # Exclusions (filter out)
+  - AI
+  - OpenAI
+  - Anthropic
+  - Claude
+  - GPT
+  - Dodgers
+  - Federal Reserve
+  - interest rate
   exclude:
-    - "sponsored"
-    - "advertisement"
+  - sponsored
+  - advertisement
