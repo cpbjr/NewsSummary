@@ -21,6 +21,9 @@ feeds:
   url: https://www.theverge.com/rss/ai-artificial-intelligence/index.xml
   category: tech
 keywords:
+  exclude:
+  - sponsored
+  - advertisement
   interests:
   - AI
   - OpenAI
@@ -30,6 +33,5 @@ keywords:
   - Dodgers
   - Federal Reserve
   - interest rate
-  exclude:
-  - sponsored
-  - advertisement
+  priority:
+  - dodgers
