@@ -175,10 +175,11 @@ def format_html_digest(grouped: dict, digest_name: str) -> str:
         "sports": "Sports",
         "general": "General News",
         "world": "World News",
+        "zerohedge": "ZeroHedge",
     }
 
     # Sort categories
-    cat_order = ["finance", "politics", "tech", "general", "world", "sports"]
+    cat_order = ["zerohedge", "finance", "politics", "tech", "general", "world", "sports"]
 
     for cat in cat_order:
         if cat not in grouped:

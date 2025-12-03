@@ -1,0 +1,454 @@
+# TrendRadar Configuration
+# Custom news feed with 5 AM & 7 PM email delivery
+# Created: 2025-11-23
+
+# ============================================================================
+# CUSTOM RSS SOURCES
+# ============================================================================
+
+custom_sources:
+  # === FINANCIAL SOURCES ===
+  - name: "ZeroHedge"
+    type: rss
+    url: "https://www.zerohedge.com/feeds/all"
+    weight: 1.2
+    category: "finance"
+    description: "Alternative financial/economic perspective"
+
+  - name: "Reuters Business"
+    type: rss
+    url: "https://www.reuters.com/rss/business"
+    weight: 1.3
+    category: "finance"
+    description: "International business news"
+
+  - name: "Financial Times"
+    type: rss
+    url: "https://www.ft.com/rss/home"
+    weight: 1.4
+    category: "finance"
+    description: "Premium business & economic news"
+
+  - name: "NPR Business"
+    type: rss
+    url: "https://feeds.npr.org/1006/rss.xml"
+    weight: 1.1
+    category: "finance"
+    description: "Public radio business coverage"
+
+  - name: "BBC Business"
+    type: rss
+    url: "https://feeds.bbci.co.uk/news/business/rss.xml"
+    weight: 1.0
+    category: "finance"
+    description: "International business perspective"
+
+  - name: "Politico Economy"
+    type: rss
+    url: "https://rss.politico.com/economy.xml"
+    weight: 1.3
+    category: "finance"
+    description: "Economic policy & markets"
+
+  # === POLITICAL SOURCES ===
+  - name: "Politico"
+    type: rss
+    url: "https://www.politico.com/rss/politicopicks.xml"
+    weight: 1.5
+    category: "politics"
+    description: "Washington political news"
+
+  - name: "Politico Congress"
+    type: rss
+    url: "https://rss.politico.com/congress.xml"
+    weight: 1.3
+    category: "politics"
+    description: "Congressional coverage"
+
+  - name: "The Federalist"
+    type: rss
+    url: "https://thefederalist.com/feed/"
+    weight: 1.0
+    category: "politics"
+    description: "Conservative political commentary"
+
+  - name: "NPR Politics"
+    type: rss
+    url: "https://feeds.npr.org/1014/rss.xml"
+    weight: 1.2
+    category: "politics"
+    description: "Public radio political coverage"
+
+  - name: "The Hill"
+    type: rss
+    url: "https://thehill.com/news/feed"
+    weight: 1.2
+    category: "politics"
+    description: "Balanced Washington coverage"
+
+  - name: "BBC World News"
+    type: rss
+    url: "https://feeds.bbci.co.uk/news/world/rss.xml"
+    weight: 1.1
+    category: "world"
+    description: "International perspective"
+
+  - name: "BBC US & Canada"
+    type: rss
+    url: "https://feeds.bbci.co.uk/news/world/us_and_canada/rss.xml"
+    weight: 1.0
+    category: "politics"
+    description: "US news from international view"
+
+  # === GENERAL NEWS ===
+  - name: "Axios"
+    type: rss
+    url: "https://www.axios.com/feeds/feed.rss"
+    weight: 1.3
+    category: "general"
+    description: "Smart brevity news"
+
+  - name: "NPR National News"
+    type: rss
+    url: "https://feeds.npr.org/1003/rss.xml"
+    weight: 1.2
+    category: "general"
+    description: "National news coverage"
+
+  # === TECHNOLOGY ===
+  - name: "TechCrunch AI"
+    type: rss
+    url: "https://techcrunch.com/category/artificial-intelligence/feed/"
+    weight: 1.4
+    category: "tech"
+    description: "AI & machine learning news"
+
+  - name: "TechCrunch Startups"
+    type: rss
+    url: "https://techcrunch.com/category/startups/feed/"
+    weight: 1.1
+    category: "tech"
+    description: "Startup ecosystem news"
+
+  - name: "BBC Technology"
+    type: rss
+    url: "http://feeds.bbci.co.uk/news/technology/rss.xml"
+    weight: 1.0
+    category: "tech"
+    description: "Tech news & analysis"
+
+  - name: "NPR Technology"
+    type: rss
+    url: "https://feeds.npr.org/1019/rss.xml"
+    weight: 0.9
+    category: "tech"
+    description: "Tech policy & trends"
+
+  # === SPORTS ===
+  - name: "LA Times Sports"
+    type: rss
+    url: "https://www.latimes.com/sports/rss2.0.xml"
+    weight: 1.0
+    category: "sports"
+    description: "LA teams & national sports"
+
+  - name: "ESPN NFL"
+    type: rss
+    url: "https://www.espn.com/espn/rss/nfl/news"
+    weight: 1.2
+    category: "sports"
+    description: "NFL news & scores"
+
+  - name: "ESPN NBA"
+    type: rss
+    url: "https://www.espn.com/espn/rss/nba/news"
+    weight: 1.2
+    category: "sports"
+    description: "NBA news & scores"
+
+  - name: "ESPN MLB"
+    type: rss
+    url: "https://www.espn.in/espn/rss/mlb/news"
+    weight: 1.0
+    category: "sports"
+    description: "MLB news & scores"
+
+  # === ADDITIONAL SOURCES ===
+  - name: "Drudge Report"
+    type: rss
+    url: "https://feedpress.me/drudgereportfeed"
+    weight: 1.2
+    category: "politics"
+    description: "News aggregator with conservative lean"
+
+# ============================================================================
+# BUILT-IN TRENDRADAR PLATFORMS (Optional)
+# ============================================================================
+
+platforms:
+  - hackernews          # Tech community news
+  - github_trending     # Developer trends
+  # - reddit            # Enable if desired (can be noisy)
+  # - tiktok            # Social trends (if interested)
+
+# ============================================================================
+# DELIVERY CONFIGURATION
+# ============================================================================
+
+delivery:
+  # Primary email delivery
+  primary:
+    mode: daily_summary
+    channel: email
+    schedules:
+      - time: "05:00"
+        timezone: "America/New_York"  # CHANGE TO YOUR TIMEZONE
+        name: "Morning Digest"
+      - time: "19:00"
+        timezone: "America/New_York"  # CHANGE TO YOUR TIMEZONE
+        name: "Evening Digest"
+
+  # Web dashboard (always enabled)
+  secondary:
+    mode: web_dashboard
+    enabled: true
+    update_interval: "1h"  # Refresh hourly
+
+  # Telegram alerts (optional - for breaking news only)
+  alerts:
+    mode: incremental_updates
+    channel: telegram
+    enabled: false  # Disabled - email only
+    keywords_only: true  # Only push keyword matches (see frequency_words.txt)
+    push_window:
+      start: "06:00"
+      end: "22:00"
+      timezone: "America/New_York"  # CHANGE TO YOUR TIMEZONE
+
+# ============================================================================
+# EMAIL CONFIGURATION
+# ============================================================================
+
+email:
+  format: html  # or 'text' for plain text
+  max_articles_per_digest: 50
+  group_by_category: true
+  include_summaries: true
+  include_images: false  # Set to true if you want article thumbnails
+
+  # Email template settings
+  template:
+    show_platform_icons: true
+    show_ranking_scores: true
+    show_cross_platform_count: true
+    color_scheme: "light"  # or 'dark'
+
+# ============================================================================
+# RANKING ALGORITHM
+# ============================================================================
+
+weights:
+  platform_rank: 50      # Official platform ranking (default: 60)
+  cross_platform: 40     # Viral velocity across sources (default: 30)
+  stability: 10          # Consistency of ranking (default: 10)
+
+# Adjust based on preference:
+# - Want viral content? Increase cross_platform to 50-60
+# - Trust official rankings? Keep platform_rank high at 60-70
+# - Value consistency? Increase stability to 20-30
+
+# ============================================================================
+# FILTERING & DEDUPLICATION
+# ============================================================================
+
+filtering:
+  # Keyword filtering (see frequency_words.txt for detailed rules)
+  enable_keyword_filter: true
+  keyword_file: "frequency_words.txt"
+
+  # Deduplication
+  deduplication:
+    enabled: true
+    title_similarity_threshold: 0.85  # 85% similar = duplicate
+    time_window_hours: 24             # Consider duplicates within 24h
+    prefer_source: "highest_weight"   # or 'earliest', 'latest'
+
+  # Quality filters
+  quality:
+    min_article_length: 100           # Characters (filters out stub articles)
+    exclude_paywalled: false          # Set true to skip paywall articles
+    language: "en"                    # Only English articles
+
+# ============================================================================
+# TIME-BASED PRIORITIES (Optional)
+# ============================================================================
+
+priority_hours:
+  # Boost financial news during market hours
+  market_hours:
+    start: "09:30"
+    end: "16:00"
+    timezone: "America/New_York"
+    boost_categories: ["finance", "business"]
+    weight_multiplier: 1.5
+
+  # Boost political news during prime time
+  political_hours:
+    start: "08:00"
+    end: "20:00"
+    timezone: "America/New_York"
+    boost_categories: ["politics", "world"]
+    weight_multiplier: 1.2
+
+# ============================================================================
+# AI FEATURES (Optional - requires API key)
+# ============================================================================
+
+ai:
+  enabled: false  # Set to true to enable AI features
+  provider: "openai"  # or 'anthropic', 'claude'
+
+  features:
+    # Generate AI summaries for each digest
+    summaries:
+      enabled: false
+      max_length: 200  # Characters per summary
+
+    # Sentiment analysis
+    sentiment_analysis:
+      enabled: false
+      include_in_email: true
+
+    # Topic clustering
+    clustering:
+      enabled: false
+      max_clusters: 5
+
+  # API configuration (add to GitHub Secrets)
+  # OPENAI_API_KEY or ANTHROPIC_API_KEY required
+
+# ============================================================================
+# CACHING & PERFORMANCE
+# ============================================================================
+
+performance:
+  cache_feeds: true
+  cache_duration_hours: 1
+  concurrent_fetch_limit: 10  # Max parallel feed fetches
+  request_timeout_seconds: 30
+  retry_failed_feeds: true
+  max_retries: 3
+
+# ============================================================================
+# LOGGING & DEBUGGING
+# ============================================================================
+
+logging:
+  level: "INFO"  # DEBUG, INFO, WARNING, ERROR
+  include_in_email: false  # Add debug info to email footer
+  save_raw_data: false     # Save raw feed data for debugging
+
+# ============================================================================
+# NOTIFICATIONS
+# ============================================================================
+
+notifications:
+  # Email settings (required)
+  email:
+    enabled: true
+    # Credentials stored in GitHub Secrets:
+    # - EMAIL_HOST (e.g., smtp.gmail.com)
+    # - EMAIL_PORT (e.g., 587)
+    # - EMAIL_USER
+    # - EMAIL_PASS (app-specific password)
+    # - EMAIL_TO
+
+  # Telegram settings (optional)
+  telegram:
+    enabled: false  # Disabled - email only
+    # Credentials stored in GitHub Secrets:
+    # - TELEGRAM_BOT_TOKEN
+    # - TELEGRAM_CHAT_ID
+
+  # Other channels (optional)
+  slack:
+    enabled: false
+    # Add SLACK_WEBHOOK_URL to GitHub Secrets if enabling
+
+  discord:
+    enabled: false
+    # Add DISCORD_WEBHOOK_URL to GitHub Secrets if enabling
+
+# ============================================================================
+# ADVANCED SETTINGS
+# ============================================================================
+
+advanced:
+  # Category-specific limits (overrides global limits)
+  category_limits:
+    finance: 12
+    politics: 10
+    tech: 15
+    sports: 8
+    general: 10
+    world: 8
+
+  # Source-specific overrides
+  source_overrides:
+    "ZeroHedge":
+      max_articles_per_digest: 3  # Limit sensational source
+    "TechCrunch AI":
+      max_articles_per_digest: 5  # Focus on AI news
+
+  # Exclude specific sources from certain digests
+  exclude_from_morning:
+    - "LA Times Sports"  # Save sports for evening
+  exclude_from_evening:
+    - "Financial Times"  # Market close already covered
+
+# ============================================================================
+# TIMEZONE REFERENCE
+# ============================================================================
+
+# Common US Timezones:
+# - America/New_York (EST/EDT)
+# - America/Chicago (CST/CDT)
+# - America/Denver (MST/MDT)
+# - America/Los_Angeles (PST/PDT)
+# - America/Phoenix (MST, no DST)
+# - America/Anchorage (AKST/AKDT)
+# - Pacific/Honolulu (HST)
+
+# Full list: https://en.wikipedia.org/wiki/List_of_tz_database_time_zones
+
+# ============================================================================
+# NOTES
+# ============================================================================
+
+# 1. GitHub Actions Cron Uses UTC
+#    Convert your local time to UTC for .github/workflows/daily-digest.yml:
+#    - 5 AM EST = 10:00 UTC
+#    - 7 PM EST = 00:00 UTC (next day)
+#    - 5 AM PST = 13:00 UTC
+#    - 7 PM PST = 03:00 UTC (next day)
+
+# 2. RSS Feed Weights
+#    Higher weight = more prominent in rankings
+#    - Critical sources: 1.3-1.5
+#    - Standard sources: 1.0-1.2
+#    - Background sources: 0.8-0.9
+
+# 3. Testing Configuration
+#    Run manual workflow in GitHub Actions to test before relying on schedule
+
+# 4. Monitoring
+#    Check Actions logs weekly for:
+#    - Feed timeouts (reduce weight or remove)
+#    - Parse errors (update feed URL)
+#    - Email delivery failures (check credentials)
+
+# 5. Optimization
+#    After first week, review and adjust:
+#    - Category limits (too many/few articles?)
+#    - Source weights (which sources provide best content?)
+#    - Keyword filters (too restrictive/permissive?)

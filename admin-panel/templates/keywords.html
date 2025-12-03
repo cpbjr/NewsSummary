@@ -1,0 +1,194 @@
+{% extends "base.html" %}
+
+{% block title %}Keyword Filters - NewsSummary Admin{% endblock %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto">
+    <h1 class="text-3xl font-bold text-gray-800 mb-8">Keyword Filters</h1>
+
+    <form id="keywordsForm" class="space-y-8">
+        <!-- Exclude Keywords -->
+        <div class="bg-white rounded-lg shadow p-6">
+            <h2 class="text-xl font-bold text-gray-800 mb-2">Exclude Keywords</h2>
+            <p class="text-sm text-gray-600 mb-4">Articles containing these words will be filtered out</p>
+
+            <div class="mb-4">
+                <div class="flex space-x-2">
+                    <input
+                        type="text"
+                        id="excludeInput"
+                        placeholder="Enter word to exclude..."
+                        class="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500"
+                        onkeypress="if(event.key==='Enter'){event.preventDefault();addKeyword('exclude')}"
+                    >
+                    <button
+                        type="button"
+                        onclick="addKeyword('exclude')"
+                        class="px-6 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700"
+                    >
+                        Add
+                    </button>
+                </div>
+            </div>
+
+            <div id="excludeKeywords" class="flex flex-wrap gap-2">
+                {% for keyword in keywords.exclude or [] %}
+                <span class="px-3 py-1 bg-red-100 text-red-800 rounded-full text-sm flex items-center space-x-2">
+                    <span>{{ keyword }}</span>
+                    <button type="button" onclick="removeKeyword('exclude', '{{ keyword }}')" class="text-red-600 hover:text-red-900">×</button>
+                </span>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Priority Keywords -->
+        <div class="bg-white rounded-lg shadow p-6">
+            <h2 class="text-xl font-bold text-gray-800 mb-2">Priority Keywords</h2>
+            <p class="text-sm text-gray-600 mb-4">Articles with these words get boosted to the top (+100 score)</p>
+
+            <div class="mb-4">
+                <div class="flex space-x-2">
+                    <input
+                        type="text"
+                        id="priorityInput"
+                        placeholder="Enter priority word..."
+                        class="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500"
+                        onkeypress="if(event.key==='Enter'){event.preventDefault();addKeyword('priority')}"
+                    >
+                    <button
+                        type="button"
+                        onclick="addKeyword('priority')"
+                        class="px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700"
+                    >
+                        Add
+                    </button>
+                </div>
+            </div>
+
+            <div id="priorityKeywords" class="flex flex-wrap gap-2">
+                {% for keyword in keywords.priority or [] %}
+                <span class="px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm flex items-center space-x-2">
+                    <span>{{ keyword }}</span>
+                    <button type="button" onclick="removeKeyword('priority', '{{ keyword }}')" class="text-green-600 hover:text-green-900">×</button>
+                </span>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Interest Keywords -->
+        <div class="bg-white rounded-lg shadow p-6">
+            <h2 class="text-xl font-bold text-gray-800 mb-2">Interest Keywords</h2>
+            <p class="text-sm text-gray-600 mb-4">Articles with these words get a moderate boost (+50 score)</p>
+
+            <div class="mb-4">
+                <div class="flex space-x-2">
+                    <input
+                        type="text"
+                        id="interestInput"
+                        placeholder="Enter interest word..."
+                        class="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                        onkeypress="if(event.key==='Enter'){event.preventDefault();addKeyword('interests')}"
+                    >
+                    <button
+                        type="button"
+                        onclick="addKeyword('interests')"
+                        class="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+                    >
+                        Add
+                    </button>
+                </div>
+            </div>
+
+            <div id="interestKeywords" class="flex flex-wrap gap-2">
+                {% for keyword in keywords.interests or [] %}
+                <span class="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm flex items-center space-x-2">
+                    <span>{{ keyword }}</span>
+                    <button type="button" onclick="removeKeyword('interests', '{{ keyword }}')" class="text-blue-600 hover:text-blue-900">×</button>
+                </span>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Save Button -->
+        <div class="flex justify-end space-x-4">
+            <button
+                type="button"
+                onclick="location.reload()"
+                class="px-6 py-3 border border-gray-300 rounded-lg hover:bg-gray-50"
+            >
+                Reset
+            </button>
+            <button
+                type="submit"
+                class="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-semibold"
+            >
+                Save Keywords
+            </button>
+        </div>
+    </form>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+let keywords = {{ keywords | tojson }};
+
+function addKeyword(type) {
+    const inputId = type === 'interests' ? 'interestInput' : type + 'Input';
+    const input = document.getElementById(inputId);
+    const keyword = input.value.trim().toLowerCase();
+
+    if (!keyword) return;
+
+    if (!keywords[type]) keywords[type] = [];
+
+    if (!keywords[type].includes(keyword)) {
+        keywords[type].push(keyword);
+        renderKeywords();
+    }
+
+    input.value = '';
+}
+
+function removeKeyword(type, keyword) {
+    keywords[type] = keywords[type].filter(k => k !== keyword);
+    renderKeywords();
+}
+
+function renderKeywords() {
+    const colors = {
+        exclude: { bg: 'bg-red-100', text: 'text-red-800', hover: 'text-red-900' },
+        priority: { bg: 'bg-green-100', text: 'text-green-800', hover: 'text-green-900' },
+        interests: { bg: 'bg-blue-100', text: 'text-blue-800', hover: 'text-blue-900' }
+    };
+
+    ['exclude', 'priority', 'interests'].forEach(type => {
+        const container = document.getElementById(type === 'interests' ? 'interestKeywords' : type + 'Keywords');
+        const color = colors[type];
+
+        container.innerHTML = (keywords[type] || []).map(keyword => `
+            <span class="px-3 py-1 ${color.bg} ${color.text} rounded-full text-sm flex items-center space-x-2">
+                <span>${keyword}</span>
+                <button type="button" onclick="removeKeyword('${type}', '${keyword}')" class="${color.hover}">×</button>
+            </span>
+        `).join('');
+    });
+}
+
+document.getElementById('keywordsForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const response = await fetch('/api/keywords', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(keywords)
+    });
+
+    if (response.ok) {
+        showToast('Keywords saved and pushed to GitHub!');
+    } else {
+        showToast('Failed to save keywords', 'error');
+    }
+});
+</script>
+{% endblock %}

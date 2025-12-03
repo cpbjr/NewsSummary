@@ -3,10 +3,18 @@ settings:
   max_per_category: 10
   dedup_similarity: 0.85
   timezone: America/New_York
+  category_limits:
+    zerohedge: 10
+    finance: 12
+    politics: 10
+    tech: 15
+    sports: 8
+    general: 10
+    world: 8
 feeds:
 - name: ZeroHedge
   url: https://www.zerohedge.com/fullrss.xml
-  category: finance
+  category: zerohedge
 - name: Axios
   url: https://www.axios.com/feeds/feed.rss
   category: general

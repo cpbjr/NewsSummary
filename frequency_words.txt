@@ -1,0 +1,380 @@
+# TrendRadar Keyword Filters
+# Custom configuration for personalized news feed
+# Created: 2025-11-23
+#
+# SYNTAX GUIDE:
+# ---------------
+# Basic matching          → keyword (case-insensitive partial match)
+# Mandatory terms (+)     → +keyword (article MUST contain this)
+# Exclusions (!)          → !keyword (filter out articles with this)
+# Quantity limits (@)     → @category:N (max N articles per digest)
+# Urgent alerts (@urgent) → @urgent:+keyword (triggers Telegram immediately)
+# Correlation (@corr)     → @correlation:word1+word2 (both must appear)
+#
+# GROUPING:
+# Use blank lines to separate thematic groups
+# Each group is processed independently
+#
+# ============================================================================
+
+# === TECH & AI GROUP ===
+# Focus on AI developments, LLMs, and automation
++AI
++LLM
++Claude
++ChatGPT
++OpenAI
++Anthropic
+automation
+machine learning
+artificial intelligence
+neural network
+GPT
+transformer
+generative AI
+!tutorial          # Exclude beginner content
+!course            # Exclude educational promotions
+!certification     # Exclude training ads
+
+# === FINANCIAL & ECONOMIC GROUP ===
+# Market news, Fed policy, economic indicators
++Federal Reserve
++Fed
++interest rate
++inflation
++earnings
+stocks
+bonds
+market
+S&P 500
+Dow Jones
+NASDAQ
+treasury
+GDP
+employment
+recession
+bull market
+bear market
+crypto
+bitcoin
+ethereum
+!prediction        # Facts only, no speculation
+!fortune teller    # Exclude mystic market predictions
+!horoscope         # No astrology-based market advice
+!pump and dump     # Exclude scam promotions
+
+# === POLITICAL GROUP ===
+# Elections, Congress, White House, policy changes
++election
++Congress
++Senate
++House
++White House
++Biden
++Trump
++Supreme Court
+legislation
+policy
+bill
+vote
+presidential
+gubernatorial
+campaign
+primary
+debate
+foreign policy
+national security
+!Twitter drama     # Exclude social media feuds
+!celebrity         # Exclude entertainment politics
+!rumor             # Facts only
+!unconfirmed       # Verified news only
+
+# === SPORTS GROUP ===
+# Focus on major leagues and LA teams
+Lakers             # Lower priority (removed +)
++Clippers
++Dodgers
++Angels
++Rams
++Chargers          # Added Chargers as priority
++USC
+NFL
+NBA
+MLB
+NHL
+playoffs
+championship
+Super Bowl
+World Series
+NBA Finals
+Stanley Cup
+!rumors            # Exclude unverified reports
+!gossip            # Exclude personal drama
+!fantasy           # Exclude fantasy sports advice
+
+# === BUSINESS & STARTUPS ===
+# Mergers, acquisitions, major business moves
+startup
+venture capital
+IPO
+merger
+acquisition
+funding
+Series A
+Series B
+unicorn
+valuation
+CEO
+leadership
+!MLM               # Exclude multi-level marketing
+!pyramid scheme    # Exclude scams
+
+# === CLIMATE & ENERGY ===
+# Environmental policy, renewable energy, climate science
+climate change
+renewable energy
+solar
+wind
+electric vehicle
+EV
+Tesla
+carbon emissions
+sustainability
+!alarmist          # Balanced coverage only
+!conspiracy        # Science-based only
+
+# === TECHNOLOGY HARDWARE ===
+# New devices, chips, hardware innovations
+Apple
+iPhone
+iPad
+Mac
+NVIDIA
+AMD
+Intel
+chip
+processor
+semiconductor
+GPU
+!leak              # Official announcements preferred
+!render            # Exclude unverified mockups
+
+# === CYBERSECURITY ===
+# Data breaches, security vulnerabilities, cyber attacks
++data breach
++security breach
++ransomware
++cyber attack
++vulnerability
+hacking
+malware
+phishing
+zero-day
+CVE
+!scare             # Balanced reporting only
+
+# ============================================================================
+# TELEGRAM URGENT ALERTS
+# These trigger immediate notifications (6 AM - 10 PM only)
+# ============================================================================
+
+@urgent:+breaking+Fed
+@urgent:+breaking+Supreme Court
+@urgent:+breaking+White House
+@urgent:+acquisition+billion
+@urgent:+merger+major
+@urgent:+data breach+million
+@urgent:+security breach+major company
+@urgent:+interest rate+decision
+@urgent:+earnings+surprise
+@urgent:+layoffs+tech
+@urgent:+IPO+major
+@urgent:+election+called
+@urgent:+war
+@urgent:+natural disaster+major
+
+# ============================================================================
+# QUANTITY LIMITS
+# Control max articles per category in each digest
+# ============================================================================
+
+@tech:15           # Max 15 tech articles per digest
+@finance:12        # Max 12 financial articles
+@politics:10       # Max 10 political articles
+@sports:8          # Max 8 sports articles
+@business:10       # Max 10 business articles
+@climate:5         # Max 5 climate articles
+@cybersecurity:6   # Max 6 security articles
+
+# ============================================================================
+# CORRELATION FILTERS
+# Only include if BOTH/ALL terms appear together
+# ============================================================================
+
+@correlation:AI+regulation          # AI regulatory news
+@correlation:Fed+rate+decision      # Fed rate decisions
+@correlation:tech+layoffs           # Tech industry layoffs
+@correlation:startup+funding+AI     # AI startup funding
+@correlation:climate+policy         # Climate policy changes
+@correlation:China+trade            # US-China trade issues
+
+# ============================================================================
+# SOURCE-SPECIFIC FILTERS (Advanced)
+# Apply keywords only to specific sources
+# ============================================================================
+
+# Reduce ZeroHedge noise (if too sensational)
+@source:ZeroHedge:!doom
+@source:ZeroHedge:!collapse
+@source:ZeroHedge:!crash imminent
+
+# Focus TechCrunch on major stories
+@source:TechCrunch:+funding
+@source:TechCrunch:+acquisition
+@source:TechCrunch:!announcement  # Reduce minor announcements
+
+# LA Times Sports: Focus on LA teams
+@source:LA Times Sports:+Dodgers
+@source:LA Times Sports:+Rams
+@source:LA Times Sports:+Chargers
+@source:LA Times Sports:+USC
+
+# ============================================================================
+# TIME-BASED KEYWORDS (Advanced)
+# Different priorities for morning vs evening digests
+# ============================================================================
+
+# Morning digest (5 AM): Focus on overnight developments
+@morning:Asian markets
+@morning:European markets
+@morning:overnight
+@morning:pre-market
+
+# Evening digest (7 PM): Focus on day's events & market close
+@evening:market close
+@evening:after hours
+@evening:day's developments
+@evening:closing bell
+
+# ============================================================================
+# SEASONAL KEYWORDS (Adjust as needed)
+# ============================================================================
+
+# Election season (enable during campaign periods)
+# primary
+# caucus
+# poll
+# voter
+
+# Tax season (January - April)
+# tax
+# IRS
+# filing
+# refund
+
+# Earnings season (quarterly)
+# earnings call
+# quarterly results
+# guidance
+
+# Sports seasons (enable/disable by season)
+# March Madness (basketball)
+# World Series (baseball)
+# Super Bowl (football)
+# NBA Finals (basketball)
+
+# ============================================================================
+# CUSTOM CATEGORIES (Optional)
+# Create your own thematic groups
+# ============================================================================
+
+# === SPACE & SCIENCE ===
+# NASA
+# SpaceX
+# Mars
+# rocket
+# satellite
+# astronomy
+# !UFO              # Science-based only
+
+# === HEALTH & MEDICINE ===
+# +FDA
+# +vaccine
+# clinical trial
+# drug approval
+# pandemic
+# epidemic
+# !anti-vax         # Science-based only
+# !conspiracy
+
+# === EDUCATION ===
+# university
+# college
+# student loan
+# education policy
+# !ranking          # Exclude university ranking spam
+
+# ============================================================================
+# NOTES & TIPS
+# ============================================================================
+
+# 1. Start Restrictive, Then Loosen
+#    Begin with tight filters (+mandatory terms, many !exclusions)
+#    Gradually remove restrictions as you see what's missing
+
+# 2. Monitor First Week
+#    Review each digest and note:
+#    - Missing important stories? (add keywords or remove !exclusions)
+#    - Too much noise? (add !exclusions or reduce @category limits)
+#    - Wrong articles getting through? (refine +mandatory terms)
+
+# 3. Seasonal Adjustments
+#    Update keywords based on current events:
+#    - Election years: Add campaign-related terms
+#    - Earnings season: Emphasize financial results
+#    - Sports playoffs: Boost team-specific terms
+
+# 4. Source Weight + Keywords = Best Results
+#    Combine high-weight trusted sources (config.yaml) with
+#    well-tuned keyword filters (this file) for optimal curation
+
+# 5. Telegram Alerts Should Be Rare
+#    Goal: <5 urgent alerts per day
+#    If getting too many, tighten @urgent: conditions
+
+# 6. Test Changes Gradually
+#    Modify 2-3 keywords at a time, review results for a few days
+#    before making more changes
+
+# ============================================================================
+# MAINTENANCE LOG
+# ============================================================================
+
+# 2025-11-23: Initial configuration
+# - Created baseline filters for tech, finance, politics, sports
+# - Set quantity limits: tech(15), finance(12), politics(10), sports(8)
+# - Configured urgent alerts for breaking news
+#
+# [Add your changes here with dates]
+
+# ============================================================================
+# QUICK REFERENCE
+# ============================================================================
+
+# Most Common Exclusions (adjust to your preferences):
+# !rumor, !gossip, !speculation, !prediction, !opinion, !conspiracy
+# !celebrity, !Twitter, !social media drama
+# !tutorial, !course, !beginner
+# !leak, !unconfirmed, !unverified
+
+# Most Common Mandatory Terms (use sparingly):
+# +breaking, +official, +confirmed, +announced
+# +Federal Reserve, +Supreme Court, +White House
+# +acquisition, +merger, +IPO, +funding
+# +data breach, +security breach, +vulnerability
+
+# Effective Correlation Examples:
+# @correlation:AI+regulation
+# @correlation:climate+policy
+# @correlation:tech+layoffs
+# @correlation:startup+funding
