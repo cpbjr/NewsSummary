@@ -106,6 +106,7 @@ def filter_articles(articles: list, keywords: dict) -> list:
 
     # Special keyword-based categories
     dodgers_pattern = re.compile(r'dodgers?', re.IGNORECASE)
+    josh_allen_pattern = re.compile(r'josh allen', re.IGNORECASE)
 
     for article in articles:
         text = f"{article['title']} {article['summary']}"
@@ -117,6 +118,8 @@ def filter_articles(articles: list, keywords: dict) -> list:
         # Recategorize based on special keywords
         if dodgers_pattern.search(text):
             article["category"] = "dodgers"
+        elif josh_allen_pattern.search(text):
+            article["category"] = "josh_allen"
 
         # Calculate score
         score = 0
@@ -131,13 +134,15 @@ def filter_articles(articles: list, keywords: dict) -> list:
     return filtered
 
 
-def group_by_category(articles: list, max_per_category: int = 12) -> dict:
-    """Group articles by category with limits."""
+def group_by_category(articles: list, default_limit: int = 12, category_limits: dict = None) -> dict:
+    """Group articles by category with individual limits."""
     groups = defaultdict(list)
+    limits = category_limits or {}
 
     for article in articles:
         cat = article["category"]
-        if len(groups[cat]) < max_per_category:
+        limit = limits.get(cat, default_limit)
+        if len(groups[cat]) < limit:
             groups[cat].append(article)
 
     return dict(groups)
@@ -184,6 +189,7 @@ def format_html_digest(grouped: dict, digest_name: str) -> str:
         "tech": "Technology",
         "sports": "Sports",
         "opinion": "Opinion & Commentary",
+        "josh_allen": "Josh Allen Updates",
         "general": "General News",
         "world": "World News",
     }
@@ -301,11 +307,19 @@ def main():
     articles = deduplicate(articles, settings.get("dedup_similarity", 0.85))
     print(f"After dedup: {len(articles)}")
 
-    # Sort by score then date
-    articles.sort(key=lambda x: (-x.get("score", 0), x["date"]), reverse=True)
+    # Sort by score then date (highest score first, then newest date)
+    articles.sort(key=lambda x: (x.get("score", 0), x["date"]), reverse=True)
 
     # Group and limit
-    grouped = group_by_category(articles, settings.get("max_per_category", 12))
+    grouped = group_by_category(
+        articles, 
+        settings.get("max_per_category", 12),
+        settings.get("category_limits", {})
+    )
+    
+    # Print category counts for debug
+    for cat, items in grouped.items():
+        print(f"Category '{cat}': {len(items)} articles")
 
     # Format HTML
     html = format_html_digest(grouped, digest_name)
