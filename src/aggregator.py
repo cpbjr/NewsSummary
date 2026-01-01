@@ -49,6 +49,31 @@ def fetch_feed(feed_config: dict) -> list:
             else:
                 article["date"] = datetime.now()
 
+            # Image extraction
+            image_url = None
+            
+            # 1. Try enclosures
+            if hasattr(entry, "links"):
+                for link in entry.links:
+                    if link.get("rel") == "enclosure" and "image" in link.get("type", ""):
+                        image_url = link.get("href")
+                        break
+            
+            # 2. Try media:content
+            if not image_url and "media_content" in entry:
+                image_url = entry["media_content"][0].get("url")
+            
+            # 3. Try media:thumbnail
+            if not image_url and "media_thumbnail" in entry:
+                image_url = entry["media_thumbnail"][0].get("url")
+            
+            # 4. Fallback to extracting from summary/description
+            if not image_url:
+                img_match = re.search(r'<img[^>]+src=["\']([^"\']+)["\']', article["summary"])
+                if img_match:
+                    image_url = img_match.group(1)
+            
+            article["image_url"] = image_url
             articles.append(article)
 
         return articles
@@ -154,22 +179,56 @@ def format_html_digest(grouped: dict, digest_name: str) -> str:
 <!DOCTYPE html>
 <html>
 <head>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
     <style>
-        body {{ font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; max-width: 700px; margin: 0 auto; padding: 20px; background: #f5f5f5; }}
-        .header {{ background: #1a1a2e; color: white; padding: 20px; border-radius: 8px 8px 0 0; }}
-        .header h1 {{ margin: 0; font-size: 24px; }}
-        .header p {{ margin: 5px 0 0; opacity: 0.8; font-size: 14px; }}
-        .content {{ background: white; padding: 20px; border-radius: 0 0 8px 8px; }}
-        .category {{ margin-top: 25px; }}
-        .category h2 {{ color: #1a1a2e; font-size: 18px; border-bottom: 2px solid #eee; padding-bottom: 8px; margin-bottom: 15px; }}
-        .article {{ margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px solid #eee; }}
+        body {{ font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; max-width: 700px; margin: 0 auto; padding: 20px; background: #f8fafc; color: #1e293b; }}
+        .header {{ background: #0f172a; color: white; padding: 40px 20px; border-radius: 12px 12px 0 0; text-align: center; border-bottom: 4px solid #3b82f6; }}
+        .header h1 {{ margin: 0; font-family: 'Playfair Display', serif; font-size: 32px; letter-spacing: -0.02em; }}
+        .header p {{ margin: 10px 0 0; opacity: 0.7; font-size: 13px; text-transform: uppercase; letter-spacing: 0.2em; font-weight: 600; }}
+        
+        .content {{ background: white; padding: 30px; border-radius: 0 0 12px 12px; shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1); }}
+        
+        .category {{ margin-top: 40px; }}
+        .category:first-child {{ margin-top: 0; }}
+        .category h2 {{ 
+            color: #0f172a; 
+            font-family: 'Playfair Display', serif; 
+            font-size: 20px; 
+            border-bottom: 1px solid #e2e8f0; 
+            padding-bottom: 12px; 
+            margin-bottom: 25px;
+            font-variant: small-caps;
+            letter-spacing: 0.05em;
+        }}
+        
+        .article {{ margin-bottom: 30px; padding-bottom: 25px; border-bottom: 1px solid #f1f5f9; }}
         .article:last-child {{ border-bottom: none; }}
-        .article h3 {{ margin: 0 0 5px; font-size: 16px; }}
-        .article h3 a {{ color: #0066cc; text-decoration: none; }}
-        .article h3 a:hover {{ text-decoration: underline; }}
-        .article .meta {{ font-size: 12px; color: #666; margin-bottom: 5px; }}
-        .article .summary {{ font-size: 14px; color: #333; line-height: 1.5; }}
-        .footer {{ text-align: center; padding: 20px; font-size: 12px; color: #666; }}
+        
+        .article-image {{ 
+            width: 100%; 
+            max-height: 300px; 
+            object-fit: cover; 
+            border-radius: 8px; 
+            margin-bottom: 15px;
+            border: 1px solid #e2e8f0;
+        }}
+        
+        .article h3 {{ margin: 0 0 8px; font-family: 'Playfair Display', serif; font-size: 19px; line-height: 1.3; }}
+        .article h3 a {{ color: #0f172a; text-decoration: none; transition: color 0.2s; }}
+        .article h3 a:hover {{ color: #3b82f6; }}
+        
+        .article .meta {{ 
+            font-size: 11px; 
+            color: #64748b; 
+            margin-bottom: 10px; 
+            text-transform: uppercase; 
+            letter-spacing: 0.1em; 
+            font-weight: 600;
+        }}
+        
+        .article .summary {{ font-size: 14px; color: #475569; line-height: 1.6; }}
+        
+        .footer {{ text-align: center; padding: 40px 20px; font-size: 11px; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.1em; }}
     </style>
 </head>
 <body>
@@ -210,10 +269,15 @@ def format_html_digest(grouped: dict, digest_name: str) -> str:
             if len(article.get("summary", "")) > 200:
                 clean_summary += "..."
 
+            img_tag = ""
+            if article.get("image_url"):
+                img_tag = f'<img src="{article["image_url"]}" class="article-image" onerror="this.style.display=\'none\';">'
+
             html += f'''
             <div class="article">
-                <h3><a href="{article['link']}">{article['title']}</a></h3>
+                {img_tag}
                 <div class="meta">{article['source']} &bull; {article['date'].strftime('%I:%M %p')}</div>
+                <h3><a href="{article['link']}">{article['title']}</a></h3>
                 <div class="summary">{clean_summary}</div>
             </div>
             '''

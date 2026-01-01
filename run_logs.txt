@@ -1,0 +1,237 @@
+send-digest	Set up job	﻿2026-01-01T21:21:34.3632217Z Current runner version: '2.330.0'
+send-digest	Set up job	2026-01-01T21:21:34.3668485Z ##[group]Runner Image Provisioner
+send-digest	Set up job	2026-01-01T21:21:34.3669830Z Hosted Compute Agent
+send-digest	Set up job	2026-01-01T21:21:34.3670758Z Version: 20251211.462
+send-digest	Set up job	2026-01-01T21:21:34.3671974Z Commit: 6cbad8c2bb55d58165063d031ccabf57e2d2db61
+send-digest	Set up job	2026-01-01T21:21:34.3673165Z Build Date: 2025-12-11T16:28:49Z
+send-digest	Set up job	2026-01-01T21:21:34.3674235Z Worker ID: {347dbdb9-cfff-4a6b-8e01-4f2f6bfb5699}
+send-digest	Set up job	2026-01-01T21:21:34.3675332Z ##[endgroup]
+send-digest	Set up job	2026-01-01T21:21:34.3676267Z ##[group]Operating System
+send-digest	Set up job	2026-01-01T21:21:34.3677154Z Ubuntu
+send-digest	Set up job	2026-01-01T21:21:34.3677876Z 24.04.3
+send-digest	Set up job	2026-01-01T21:21:34.3678681Z LTS
+send-digest	Set up job	2026-01-01T21:21:34.3679499Z ##[endgroup]
+send-digest	Set up job	2026-01-01T21:21:34.3680309Z ##[group]Runner Image
+send-digest	Set up job	2026-01-01T21:21:34.3681370Z Image: ubuntu-24.04
+send-digest	Set up job	2026-01-01T21:21:34.3682515Z Version: 20251215.174.1
+send-digest	Set up job	2026-01-01T21:21:34.3684120Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20251215.174/images/ubuntu/Ubuntu2404-Readme.md
+send-digest	Set up job	2026-01-01T21:21:34.3686629Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20251215.174
+send-digest	Set up job	2026-01-01T21:21:34.3688847Z ##[endgroup]
+send-digest	Set up job	2026-01-01T21:21:34.3690613Z ##[group]GITHUB_TOKEN Permissions
+send-digest	Set up job	2026-01-01T21:21:34.3693830Z Contents: read
+send-digest	Set up job	2026-01-01T21:21:34.3694736Z Metadata: read
+send-digest	Set up job	2026-01-01T21:21:34.3695561Z Packages: read
+send-digest	Set up job	2026-01-01T21:21:34.3696480Z ##[endgroup]
+send-digest	Set up job	2026-01-01T21:21:34.3699695Z Secret source: Actions
+send-digest	Set up job	2026-01-01T21:21:34.3701177Z Prepare workflow directory
+send-digest	Set up job	2026-01-01T21:21:34.4319065Z Prepare all required actions
+send-digest	Set up job	2026-01-01T21:21:34.4435554Z Getting action download info
+send-digest	Set up job	2026-01-01T21:21:34.8567008Z Download action repository 'actions/checkout@v4' (SHA:34e114876b0b11c390a56381ad16ebd13914f8d5)
+send-digest	Set up job	2026-01-01T21:21:34.9728301Z Download action repository 'actions/setup-python@v5' (SHA:a26af69be951a213d495a4c3e4e4022e16d87065)
+send-digest	Set up job	2026-01-01T21:21:35.1008457Z Download action repository 'actions/upload-artifact@v4' (SHA:ea165f8d65b6e75b540449e92b4886f43607fa02)
+send-digest	Set up job	2026-01-01T21:21:35.3326190Z Complete job name: send-digest
+send-digest	Checkout	﻿2026-01-01T21:21:35.3990152Z ##[group]Run actions/checkout@v4
+send-digest	Checkout	2026-01-01T21:21:35.3990959Z with:
+send-digest	Checkout	2026-01-01T21:21:35.3991383Z   repository: cpbjr/NewsSummary
+send-digest	Checkout	2026-01-01T21:21:35.3992422Z   token: ***
+send-digest	Checkout	2026-01-01T21:21:35.3992846Z   ssh-strict: true
+send-digest	Checkout	2026-01-01T21:21:35.3993261Z   ssh-user: git
+send-digest	Checkout	2026-01-01T21:21:35.3993687Z   persist-credentials: true
+send-digest	Checkout	2026-01-01T21:21:35.3994162Z   clean: true
+send-digest	Checkout	2026-01-01T21:21:35.3994582Z   sparse-checkout-cone-mode: true
+send-digest	Checkout	2026-01-01T21:21:35.3995081Z   fetch-depth: 1
+send-digest	Checkout	2026-01-01T21:21:35.3995497Z   fetch-tags: false
+send-digest	Checkout	2026-01-01T21:21:35.3995924Z   show-progress: true
+send-digest	Checkout	2026-01-01T21:21:35.3996354Z   lfs: false
+send-digest	Checkout	2026-01-01T21:21:35.3996743Z   submodules: false
+send-digest	Checkout	2026-01-01T21:21:35.3997177Z   set-safe-directory: true
+send-digest	Checkout	2026-01-01T21:21:35.3997920Z ##[endgroup]
+send-digest	Checkout	2026-01-01T21:21:35.5159759Z Syncing repository: cpbjr/NewsSummary
+send-digest	Checkout	2026-01-01T21:21:35.5162638Z ##[group]Getting Git version info
+send-digest	Checkout	2026-01-01T21:21:35.5163776Z Working directory is '/home/runner/work/NewsSummary/NewsSummary'
+send-digest	Checkout	2026-01-01T21:21:35.5166377Z [command]/usr/bin/git version
+send-digest	Checkout	2026-01-01T21:21:35.5223957Z git version 2.52.0
+send-digest	Checkout	2026-01-01T21:21:35.5252412Z ##[endgroup]
+send-digest	Checkout	2026-01-01T21:21:35.5268043Z Temporarily overriding HOME='/home/runner/work/_temp/e0811bb5-fcdb-468e-a046-a4be79c1afb3' before making global git config changes
+send-digest	Checkout	2026-01-01T21:21:35.5274175Z Adding repository directory to the temporary git global config as a safe directory
+send-digest	Checkout	2026-01-01T21:21:35.5277087Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/NewsSummary/NewsSummary
+send-digest	Checkout	2026-01-01T21:21:35.5325960Z Deleting the contents of '/home/runner/work/NewsSummary/NewsSummary'
+send-digest	Checkout	2026-01-01T21:21:35.5328812Z ##[group]Initializing the repository
+send-digest	Checkout	2026-01-01T21:21:35.5334439Z [command]/usr/bin/git init /home/runner/work/NewsSummary/NewsSummary
+send-digest	Checkout	2026-01-01T21:21:35.5423530Z hint: Using 'master' as the name for the initial branch. This default branch name
+send-digest	Checkout	2026-01-01T21:21:35.5425371Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+send-digest	Checkout	2026-01-01T21:21:35.5428002Z hint: to use in all of your new repositories, which will suppress this warning,
+send-digest	Checkout	2026-01-01T21:21:35.5429133Z hint: call:
+send-digest	Checkout	2026-01-01T21:21:35.5429749Z hint:
+send-digest	Checkout	2026-01-01T21:21:35.5430506Z hint: 	git config --global init.defaultBranch <name>
+send-digest	Checkout	2026-01-01T21:21:35.5431435Z hint:
+send-digest	Checkout	2026-01-01T21:21:35.5432671Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+send-digest	Checkout	2026-01-01T21:21:35.5434178Z hint: 'development'. The just-created branch can be renamed via this command:
+send-digest	Checkout	2026-01-01T21:21:35.5435380Z hint:
+send-digest	Checkout	2026-01-01T21:21:35.5436027Z hint: 	git branch -m <name>
+send-digest	Checkout	2026-01-01T21:21:35.5436737Z hint:
+send-digest	Checkout	2026-01-01T21:21:35.5437679Z hint: Disable this message with "git config set advice.defaultBranchName false"
+send-digest	Checkout	2026-01-01T21:21:35.5440069Z Initialized empty Git repository in /home/runner/work/NewsSummary/NewsSummary/.git/
+send-digest	Checkout	2026-01-01T21:21:35.5443044Z [command]/usr/bin/git remote add origin https://github.com/cpbjr/NewsSummary
+send-digest	Checkout	2026-01-01T21:21:35.5482675Z ##[endgroup]
+send-digest	Checkout	2026-01-01T21:21:35.5483839Z ##[group]Disabling automatic garbage collection
+send-digest	Checkout	2026-01-01T21:21:35.5486735Z [command]/usr/bin/git config --local gc.auto 0
+send-digest	Checkout	2026-01-01T21:21:35.5520143Z ##[endgroup]
+send-digest	Checkout	2026-01-01T21:21:35.5521222Z ##[group]Setting up auth
+send-digest	Checkout	2026-01-01T21:21:35.5527339Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+send-digest	Checkout	2026-01-01T21:21:35.5562477Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+send-digest	Checkout	2026-01-01T21:21:35.5907403Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+send-digest	Checkout	2026-01-01T21:21:35.5942128Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+send-digest	Checkout	2026-01-01T21:21:35.6186646Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+send-digest	Checkout	2026-01-01T21:21:35.6220778Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+send-digest	Checkout	2026-01-01T21:21:35.6478093Z [command]/usr/bin/git config --local http.https://github.com/.extraheader AUTHORIZATION: basic ***
+send-digest	Checkout	2026-01-01T21:21:35.6517360Z ##[endgroup]
+send-digest	Checkout	2026-01-01T21:21:35.6520091Z ##[group]Fetching the repository
+send-digest	Checkout	2026-01-01T21:21:35.6527883Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +34c9c69f801ce4a7f9fcbaa8b499ac92706dbbfe:refs/remotes/origin/main
+send-digest	Checkout	2026-01-01T21:21:36.2439968Z From https://github.com/cpbjr/NewsSummary
+send-digest	Checkout	2026-01-01T21:21:36.2450686Z  * [new ref]         34c9c69f801ce4a7f9fcbaa8b499ac92706dbbfe -> origin/main
+send-digest	Checkout	2026-01-01T21:21:36.2481556Z ##[endgroup]
+send-digest	Checkout	2026-01-01T21:21:36.2485946Z ##[group]Determining the checkout info
+send-digest	Checkout	2026-01-01T21:21:36.2487393Z ##[endgroup]
+send-digest	Checkout	2026-01-01T21:21:36.2493158Z [command]/usr/bin/git sparse-checkout disable
+send-digest	Checkout	2026-01-01T21:21:36.2535944Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+send-digest	Checkout	2026-01-01T21:21:36.2567361Z ##[group]Checking out the ref
+send-digest	Checkout	2026-01-01T21:21:36.2570036Z [command]/usr/bin/git checkout --progress --force -B main refs/remotes/origin/main
+send-digest	Checkout	2026-01-01T21:21:36.2662786Z Switched to a new branch 'main'
+send-digest	Checkout	2026-01-01T21:21:36.2666603Z branch 'main' set up to track 'origin/main'.
+send-digest	Checkout	2026-01-01T21:21:36.2675198Z ##[endgroup]
+send-digest	Checkout	2026-01-01T21:21:36.2712745Z [command]/usr/bin/git log -1 --format=%H
+send-digest	Checkout	2026-01-01T21:21:36.2737421Z 34c9c69f801ce4a7f9fcbaa8b499ac92706dbbfe
+send-digest	Set up Python	﻿2026-01-01T21:21:36.2999596Z ##[group]Run actions/setup-python@v5
+send-digest	Set up Python	2026-01-01T21:21:36.3000235Z with:
+send-digest	Set up Python	2026-01-01T21:21:36.3000655Z   python-version: 3.11
+send-digest	Set up Python	2026-01-01T21:21:36.3001132Z   check-latest: false
+send-digest	Set up Python	2026-01-01T21:21:36.3001922Z   token: ***
+send-digest	Set up Python	2026-01-01T21:21:36.3002382Z   update-environment: true
+send-digest	Set up Python	2026-01-01T21:21:36.3002895Z   allow-prereleases: false
+send-digest	Set up Python	2026-01-01T21:21:36.3003397Z   freethreaded: false
+send-digest	Set up Python	2026-01-01T21:21:36.3003842Z ##[endgroup]
+send-digest	Set up Python	2026-01-01T21:21:36.4944199Z ##[group]Installed versions
+send-digest	Set up Python	2026-01-01T21:21:36.5363129Z Successfully set up CPython (3.11.14)
+send-digest	Set up Python	2026-01-01T21:21:36.5366969Z ##[endgroup]
+send-digest	Install dependencies	﻿2026-01-01T21:21:36.5609656Z ##[group]Run pip install -r requirements.txt
+send-digest	Install dependencies	2026-01-01T21:21:36.5612112Z [36;1mpip install -r requirements.txt[0m
+send-digest	Install dependencies	2026-01-01T21:21:36.5795611Z shell: /usr/bin/bash -e {0}
+send-digest	Install dependencies	2026-01-01T21:21:36.5796717Z env:
+send-digest	Install dependencies	2026-01-01T21:21:36.5797826Z   pythonLocation: /opt/hostedtoolcache/Python/3.11.14/x64
+send-digest	Install dependencies	2026-01-01T21:21:36.5799763Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.11.14/x64/lib/pkgconfig
+send-digest	Install dependencies	2026-01-01T21:21:36.5801939Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.14/x64
+send-digest	Install dependencies	2026-01-01T21:21:36.5803604Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.14/x64
+send-digest	Install dependencies	2026-01-01T21:21:36.5805245Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.14/x64
+send-digest	Install dependencies	2026-01-01T21:21:36.5806883Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.11.14/x64/lib
+send-digest	Install dependencies	2026-01-01T21:21:36.5808268Z ##[endgroup]
+send-digest	Install dependencies	2026-01-01T21:21:39.2568888Z Collecting feedparser>=6.0.0 (from -r requirements.txt (line 1))
+send-digest	Install dependencies	2026-01-01T21:21:39.3222017Z   Downloading feedparser-6.0.12-py3-none-any.whl.metadata (2.7 kB)
+send-digest	Install dependencies	2026-01-01T21:21:39.3723586Z Collecting pyyaml>=6.0 (from -r requirements.txt (line 2))
+send-digest	Install dependencies	2026-01-01T21:21:39.3867007Z   Downloading pyyaml-6.0.3-cp311-cp311-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl.metadata (2.4 kB)
+send-digest	Install dependencies	2026-01-01T21:21:39.3944183Z Collecting sgmllib3k (from feedparser>=6.0.0->-r requirements.txt (line 1))
+send-digest	Install dependencies	2026-01-01T21:21:39.4023166Z   Downloading sgmllib3k-1.0.0.tar.gz (5.8 kB)
+send-digest	Install dependencies	2026-01-01T21:21:39.4086998Z   Installing build dependencies: started
+send-digest	Install dependencies	2026-01-01T21:21:40.7648085Z   Installing build dependencies: finished with status 'done'
+send-digest	Install dependencies	2026-01-01T21:21:40.7653706Z   Getting requirements to build wheel: started
+send-digest	Install dependencies	2026-01-01T21:21:41.1490922Z   Getting requirements to build wheel: finished with status 'done'
+send-digest	Install dependencies	2026-01-01T21:21:41.1512635Z   Preparing metadata (pyproject.toml): started
+send-digest	Install dependencies	2026-01-01T21:21:41.3347569Z   Preparing metadata (pyproject.toml): finished with status 'done'
+send-digest	Install dependencies	2026-01-01T21:21:41.3450464Z Downloading feedparser-6.0.12-py3-none-any.whl (81 kB)
+send-digest	Install dependencies	2026-01-01T21:21:41.3713808Z Downloading pyyaml-6.0.3-cp311-cp311-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl (806 kB)
+send-digest	Install dependencies	2026-01-01T21:21:41.4210238Z    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 806.6/806.6 kB 16.7 MB/s  0:00:00
+send-digest	Install dependencies	2026-01-01T21:21:41.4300292Z Building wheels for collected packages: sgmllib3k
+send-digest	Install dependencies	2026-01-01T21:21:41.4305144Z   Building wheel for sgmllib3k (pyproject.toml): started
+send-digest	Install dependencies	2026-01-01T21:21:41.6406062Z   Building wheel for sgmllib3k (pyproject.toml): finished with status 'done'
+send-digest	Install dependencies	2026-01-01T21:21:41.6419343Z   Created wheel for sgmllib3k: filename=sgmllib3k-1.0.0-py3-none-any.whl size=6089 sha256=809ada067834a6f5e3f660971ae3d30b53b54881c9d3ac47804fd2b9582a1a09
+send-digest	Install dependencies	2026-01-01T21:21:41.6422509Z   Stored in directory: /home/runner/.cache/pip/wheels/3b/25/2a/105d6a15df6914f4d15047691c6c28f9052cc1173e40285d03
+send-digest	Install dependencies	2026-01-01T21:21:41.6435983Z Successfully built sgmllib3k
+send-digest	Install dependencies	2026-01-01T21:21:41.6520876Z Installing collected packages: sgmllib3k, pyyaml, feedparser
+send-digest	Install dependencies	2026-01-01T21:21:41.7644109Z 
+send-digest	Install dependencies	2026-01-01T21:21:41.7666026Z Successfully installed feedparser-6.0.12 pyyaml-6.0.3 sgmllib3k-1.0.0
+send-digest	Determine digest type	﻿2026-01-01T21:21:41.9582946Z ##[group]Run HOUR=$(TZ='America/New_York' date +%H)
+send-digest	Determine digest type	2026-01-01T21:21:41.9583409Z [36;1mHOUR=$(TZ='America/New_York' date +%H)[0m
+send-digest	Determine digest type	2026-01-01T21:21:41.9583720Z [36;1mif [ "evening" != "" ]; then[0m
+send-digest	Determine digest type	2026-01-01T21:21:41.9584033Z [36;1m  echo "type=evening" >> $GITHUB_OUTPUT[0m
+send-digest	Determine digest type	2026-01-01T21:21:41.9584340Z [36;1melif [ $HOUR -lt 12 ]; then[0m
+send-digest	Determine digest type	2026-01-01T21:21:41.9584670Z [36;1m  echo "type=morning" >> $GITHUB_OUTPUT[0m
+send-digest	Determine digest type	2026-01-01T21:21:41.9584948Z [36;1melse[0m
+send-digest	Determine digest type	2026-01-01T21:21:41.9585203Z [36;1m  echo "type=evening" >> $GITHUB_OUTPUT[0m
+send-digest	Determine digest type	2026-01-01T21:21:41.9585477Z [36;1mfi[0m
+send-digest	Determine digest type	2026-01-01T21:21:41.9624630Z shell: /usr/bin/bash -e {0}
+send-digest	Determine digest type	2026-01-01T21:21:41.9624913Z env:
+send-digest	Determine digest type	2026-01-01T21:21:41.9625181Z   pythonLocation: /opt/hostedtoolcache/Python/3.11.14/x64
+send-digest	Determine digest type	2026-01-01T21:21:41.9625942Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.11.14/x64/lib/pkgconfig
+send-digest	Determine digest type	2026-01-01T21:21:41.9626363Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.14/x64
+send-digest	Determine digest type	2026-01-01T21:21:41.9626731Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.14/x64
+send-digest	Determine digest type	2026-01-01T21:21:41.9627140Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.14/x64
+send-digest	Determine digest type	2026-01-01T21:21:41.9627495Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.11.14/x64/lib
+send-digest	Determine digest type	2026-01-01T21:21:41.9627814Z ##[endgroup]
+send-digest	Run aggregator	﻿2026-01-01T21:21:41.9798616Z ##[group]Run python src/aggregator.py evening
+send-digest	Run aggregator	2026-01-01T21:21:41.9798987Z [36;1mpython src/aggregator.py evening[0m
+send-digest	Run aggregator	2026-01-01T21:21:41.9832932Z shell: /usr/bin/bash -e {0}
+send-digest	Run aggregator	2026-01-01T21:21:41.9833196Z env:
+send-digest	Run aggregator	2026-01-01T21:21:41.9833476Z   pythonLocation: /opt/hostedtoolcache/Python/3.11.14/x64
+send-digest	Run aggregator	2026-01-01T21:21:41.9833909Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.11.14/x64/lib/pkgconfig
+send-digest	Run aggregator	2026-01-01T21:21:41.9834321Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.14/x64
+send-digest	Run aggregator	2026-01-01T21:21:41.9834703Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.14/x64
+send-digest	Run aggregator	2026-01-01T21:21:41.9835051Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.14/x64
+send-digest	Run aggregator	2026-01-01T21:21:41.9835406Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.11.14/x64/lib
+send-digest	Run aggregator	2026-01-01T21:21:41.9836029Z   EMAIL_HOST: ***
+send-digest	Run aggregator	2026-01-01T21:21:41.9836256Z   EMAIL_PORT: ***
+send-digest	Run aggregator	2026-01-01T21:21:41.9836475Z   EMAIL_USER: ***
+send-digest	Run aggregator	2026-01-01T21:21:41.9836689Z   EMAIL_PASS: ***
+send-digest	Run aggregator	2026-01-01T21:21:41.9836911Z   EMAIL_TO: ***
+send-digest	Run aggregator	2026-01-01T21:21:41.9837117Z ##[endgroup]
+send-digest	Run aggregator	2026-01-01T21:21:47.8034968Z Generating Evening Digest...
+send-digest	Run aggregator	2026-01-01T21:21:47.8037098Z Fetching 20 feeds...
+send-digest	Run aggregator	2026-01-01T21:21:47.8038531Z Fetched 315 articles
+send-digest	Run aggregator	2026-01-01T21:21:47.8039979Z Recent articles: 55
+send-digest	Run aggregator	2026-01-01T21:21:47.8040657Z After keyword filter: 54
+send-digest	Run aggregator	2026-01-01T21:21:47.8042309Z After dedup: 52
+send-digest	Run aggregator	2026-01-01T21:21:47.8042720Z Error sending email: (535, b'5.7.8 Error: authentication failed')
+send-digest	Run aggregator	2026-01-01T21:21:47.8043236Z Saved digest to digest.html
+send-digest	Run aggregator	2026-01-01T21:21:47.8043606Z Done!
+send-digest	Upload digest artifact	﻿2026-01-01T21:21:47.8355084Z ##[group]Run actions/upload-artifact@v4
+send-digest	Upload digest artifact	2026-01-01T21:21:47.8355388Z with:
+send-digest	Upload digest artifact	2026-01-01T21:21:47.8355604Z   name: digest-evening-20645787200
+send-digest	Upload digest artifact	2026-01-01T21:21:47.8355866Z   path: digest.html
+send-digest	Upload digest artifact	2026-01-01T21:21:47.8356092Z   if-no-files-found: ignore
+send-digest	Upload digest artifact	2026-01-01T21:21:47.8356335Z   compression-level: 6
+send-digest	Upload digest artifact	2026-01-01T21:21:47.8356560Z   overwrite: false
+send-digest	Upload digest artifact	2026-01-01T21:21:47.8356782Z   include-hidden-files: false
+send-digest	Upload digest artifact	2026-01-01T21:21:47.8357012Z env:
+send-digest	Upload digest artifact	2026-01-01T21:21:47.8357269Z   pythonLocation: /opt/hostedtoolcache/Python/3.11.14/x64
+send-digest	Upload digest artifact	2026-01-01T21:21:47.8357706Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.11.14/x64/lib/pkgconfig
+send-digest	Upload digest artifact	2026-01-01T21:21:47.8358113Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.14/x64
+send-digest	Upload digest artifact	2026-01-01T21:21:47.8358486Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.14/x64
+send-digest	Upload digest artifact	2026-01-01T21:21:47.8358849Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.14/x64
+send-digest	Upload digest artifact	2026-01-01T21:21:47.8359199Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.11.14/x64/lib
+send-digest	Upload digest artifact	2026-01-01T21:21:47.8359538Z ##[endgroup]
+send-digest	Upload digest artifact	2026-01-01T21:21:48.0702768Z With the provided path, there will be 1 file uploaded
+send-digest	Upload digest artifact	2026-01-01T21:21:48.0704060Z Artifact name is valid!
+send-digest	Upload digest artifact	2026-01-01T21:21:48.0708587Z Root directory input is valid!
+send-digest	Upload digest artifact	2026-01-01T21:21:48.1858585Z Beginning upload of artifact content to blob storage
+send-digest	Upload digest artifact	2026-01-01T21:21:48.2484744Z Uploaded bytes 6325
+send-digest	Upload digest artifact	2026-01-01T21:21:48.2658859Z Finished uploading artifact content to blob storage!
+send-digest	Upload digest artifact	2026-01-01T21:21:48.2663232Z SHA256 digest of uploaded artifact zip is e236fd63ab31f39f9507dc8bdc4b1a588593ff16bd30c0f8a0205c8caef318ec
+send-digest	Upload digest artifact	2026-01-01T21:21:48.2664432Z Finalizing artifact upload
+send-digest	Upload digest artifact	2026-01-01T21:21:48.3643230Z Artifact digest-evening-20645787200.zip successfully finalized. Artifact ID 5004590617
+send-digest	Upload digest artifact	2026-01-01T21:21:48.3644512Z Artifact digest-evening-20645787200 has been successfully uploaded! Final size is 6325 bytes. Artifact ID is 5004590617
+send-digest	Upload digest artifact	2026-01-01T21:21:48.3645789Z Artifact download URL: https://github.com/cpbjr/NewsSummary/actions/runs/20645787200/artifacts/5004590617
+send-digest	Post Set up Python	﻿2026-01-01T21:21:48.3796790Z Post job cleanup.
+send-digest	Post Checkout	﻿2026-01-01T21:21:48.5474826Z Post job cleanup.
+send-digest	Post Checkout	2026-01-01T21:21:48.6809741Z [command]/usr/bin/git version
+send-digest	Post Checkout	2026-01-01T21:21:48.6888205Z git version 2.52.0
+send-digest	Post Checkout	2026-01-01T21:21:48.6972419Z Temporarily overriding HOME='/home/runner/work/_temp/233242d2-e4e6-4556-acd3-47b66e9762de' before making global git config changes
+send-digest	Post Checkout	2026-01-01T21:21:48.6976510Z Adding repository directory to the temporary git global config as a safe directory
+send-digest	Post Checkout	2026-01-01T21:21:48.6988169Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/NewsSummary/NewsSummary
+send-digest	Post Checkout	2026-01-01T21:21:48.7079787Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+send-digest	Post Checkout	2026-01-01T21:21:48.7147769Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+send-digest	Post Checkout	2026-01-01T21:21:48.7517593Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+send-digest	Post Checkout	2026-01-01T21:21:48.7565517Z http.https://github.com/.extraheader
+send-digest	Post Checkout	2026-01-01T21:21:48.7592621Z [command]/usr/bin/git config --local --unset-all http.https://github.com/.extraheader
+send-digest	Post Checkout	2026-01-01T21:21:48.7627512Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+send-digest	Post Checkout	2026-01-01T21:21:48.7999264Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+send-digest	Post Checkout	2026-01-01T21:21:48.8053033Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+send-digest	Complete job	﻿2026-01-01T21:21:48.8588723Z Cleaning up orphan processes
