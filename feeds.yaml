@@ -8,30 +8,84 @@ settings:
     federalist: 10
     dodgers: 10
     finance: 12
-    politics: 10
+    politics: 12
     tech: 15
     sports: 8
+    world: 10
+    opinion: 8
     general: 10
 feeds:
 # Individual Feed Categories (shown first in digest)
 - name: ZeroHedge
-  url: https://www.zerohedge.com/fullrss.xml
+  url: https://cms.zerohedge.com/fullrss2.xml
   category: zerohedge
   weight: 1.0
 - name: The Federalist
   url: https://thefederalist.com/feed/
   category: federalist
   weight: 1.0
+- name: Punchbowl News
+  url: https://punchbowl.news/feed/
+  category: politics
+  weight: 1.5
 
 # General Categories (multiple feeds per category)
 - name: Axios
   url: https://www.axios.com/feeds/feed.rss
   category: general
   weight: 1.0
+- name: Politico Playbook
+  url: https://rss.politico.com/playbook.xml
+  category: politics
+  weight: 1.4
+- name: Politico Economy
+  url: https://rss.politico.com/economy.xml
+  category: finance
+  weight: 1.1
+- name: WSJ Opinion
+  url: https://feeds.content.dowjones.io/public/rss/RSSOpinion
+  category: opinion
+  weight: 1.2
+- name: WSJ World News
+  url: https://feeds.content.dowjones.io/public/rss/RSSWorldNews
+  category: world
+  weight: 1.3
+- name: WSJ Business
+  url: https://feeds.content.dowjones.io/public/rss/WSJcomUSBusiness
+  category: finance
+  weight: 1.2
+- name: WSJ Markets
+  url: https://feeds.content.dowjones.io/public/rss/RSSMarketsMain
+  category: finance
+  weight: 1.1
+- name: WSJ Tech
+  url: https://feeds.content.dowjones.io/public/rss/RSSWSJD
+  category: tech
+  weight: 1.1
+- name: WSJ US News
+  url: https://feeds.content.dowjones.io/public/rss/RSSUSnews
+  category: general
+  weight: 1.0
+- name: WSJ Politics
+  url: https://feeds.content.dowjones.io/public/rss/socialpoliticsfeed
+  category: politics
+  weight: 1.2
+- name: Reuters Business
+  url: https://www.reuters.com/rss/business
+  category: finance
+  weight: 1.3
 - name: MacDailyNews
   url: https://macdailynews.com/feed/
   category: tech
   weight: 1.2
+- name: Simon Willison
+  url: https://simonwillison.net/atom/everything/
+  category: tech
+  weight: 1.4
+- name: The Rundown AI
+  url: https://www.therundown.ai/feed
+  category: tech
+  weight: 1.0
 - name: The Verge AI
   url: https://www.theverge.com/rss/ai-artificial-intelligence/index.xml
   category: tech
@@ -40,6 +94,10 @@ feeds:
   url: https://dodgersnation.com/feed/
   category: sports
   weight: 1.5
+- name: Dodger Blue
+  url: https://dodgerblue.com/feed/
+  category: sports
+  weight: 1.4
 keywords:
   exclude:
   - sponsored
@@ -47,11 +105,18 @@ keywords:
   interests:
   - AI
   - OpenAI
+  - Gemini
+  - IDE 
+  - Inflation
+  - thicc latinas
   - Anthropic
   - Claude
   - GPT
   - Dodgers
+  - Chargers
+  - Josh Allen 
   - Federal Reserve
   - interest rate
   priority:
   - dodgers
+  - Josh Allen

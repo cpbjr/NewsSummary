@@ -183,6 +183,7 @@ def format_html_digest(grouped: dict, digest_name: str) -> str:
         "politics": "Politics",
         "tech": "Technology",
         "sports": "Sports",
+        "opinion": "Opinion & Commentary",
         "general": "General News",
         "world": "World News",
     }
