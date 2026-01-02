@@ -1,18 +1,20 @@
 # Active Tasks
 
-**Last Updated**: 2026-01-01 14:26
+**Last Updated**: 2026-01-02 06:15
 
 ---
 
 ## Issues Reported
 
-*Zero issues reported.*
+* [ ] **Issue #1**: Delivery is broken. ([URL](https://github.com/cpbjr/NewsSummary/issues/1))
+  > Zerohedge is rarely delivered. Want to have multiple sources for Dodgers, tech, and general news.
 
 ---
 
 ## Currently Working On
 
-*No active tasks yet. Move tasks from planned.md when starting work.*
+- [ ] **Issue #1**: Delivery is broken. (Ongoing monitoring of new schedule/sources)
+- [ ] **Better AI Feed**: Replace The Verge AI with tutorial-focused source (Moved from planned)
 
 ---
 

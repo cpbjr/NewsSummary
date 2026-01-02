@@ -340,12 +340,19 @@ def main():
     hour = datetime.now().hour
     if len(sys.argv) > 1:
         digest_type = sys.argv[1]
-    elif hour < 12:
+    elif hour < 11:
         digest_type = "morning"
+    elif hour < 16:
+        digest_type = "noon"
     else:
         digest_type = "evening"
 
-    digest_name = "Morning Digest" if digest_type == "morning" else "Evening Digest"
+    names = {
+        "morning": "Morning Digest",
+        "noon": "Noon Digest",
+        "evening": "Evening Digest"
+    }
+    digest_name = names.get(digest_type, "News Digest")
 
     print(f"Generating {digest_name}...")
 
@@ -358,10 +365,12 @@ def main():
     articles = fetch_all_feeds(config["feeds"])
     print(f"Fetched {len(articles)} articles")
 
-    # Filter by recent (last 12 hours)
-    cutoff = datetime.now() - timedelta(hours=12)
+    # Filter by recent (dynamic window)
+    # Morning: 12h (6pm-6am), Noon: 6h (6am-12pm), Evening: 6h (12pm-6pm)
+    hours_back = 12 if digest_type == "morning" else 6
+    cutoff = datetime.now() - timedelta(hours=hours_back)
     articles = [a for a in articles if a["date"] > cutoff]
-    print(f"Recent articles: {len(articles)}")
+    print(f"Recent articles (last {hours_back}h): {len(articles)}")
 
     # Filter by keywords
     articles = filter_articles(articles, config.get("keywords", {}))

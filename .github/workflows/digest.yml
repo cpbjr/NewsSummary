@@ -1,15 +1,18 @@
 name: News Digest
 
+# on:
+#   schedule:
+#     # 6 AM MT = 13:00 UTC
+#     - cron: '0 13 * * *'
+#     # 12 PM MT = 19:00 UTC
+#     - cron: '0 19 * * *'
+#     # 6 PM MT = 01:00 UTC
+#     - cron: '0 1 * * *'
 on:
-  schedule:
-    # 5 AM EST = 10:00 UTC
-    - cron: '0 10 * * *'
-    # 7 PM EST = 00:00 UTC (midnight)
-    - cron: '0 0 * * *'
   workflow_dispatch:
     inputs:
       digest_type:
-        description: 'Digest type (morning/evening)'
+        description: 'Digest type (morning/noon/evening)'
         required: false
         default: 'morning'
 
@@ -32,11 +35,13 @@ jobs:
       - name: Determine digest type
         id: digest
         run: |
-          HOUR=$(TZ='America/New_York' date +%H)
+          HOUR=$(TZ='America/Denver' date +%H)
           if [ "${{ github.event.inputs.digest_type }}" != "" ]; then
             echo "type=${{ github.event.inputs.digest_type }}" >> $GITHUB_OUTPUT
-          elif [ $HOUR -lt 12 ]; then
+          elif [ $HOUR -lt 11 ]; then
             echo "type=morning" >> $GITHUB_OUTPUT
+          elif [ $HOUR -lt 16 ]; then
+            echo "type=noon" >> $GITHUB_OUTPUT
           else
             echo "type=evening" >> $GITHUB_OUTPUT
           fi

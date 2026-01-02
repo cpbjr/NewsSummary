@@ -2,7 +2,7 @@ settings:
   max_articles_per_digest: 30
   max_per_category: 10
   dedup_similarity: 0.85
-  timezone: America/New_York
+  timezone: America/Denver
   category_limits:
     zerohedge: 10
     federalist: 10
