@@ -17,6 +17,10 @@ from email.mime.multipart import MIMEMultipart
 from difflib import SequenceMatcher
 from collections import defaultdict
 from concurrent.futures import ThreadPoolExecutor, as_completed
+from dotenv import load_dotenv
+
+# Load environment variables from .env if it exists
+load_dotenv()
 
 
 def load_config(config_path: str = "feeds.yaml") -> dict:
