@@ -20,7 +20,7 @@ rsync -avz --exclude='venv' --exclude='.git' --exclude='.github' --exclude='__py
 echo "⚙️  Configuring environment variables..."
 ssh $SERVER << 'ENDSSH'
 cat > /var/www/newssummary/.env << EOF
-EMAIL_HOST=smtp.gmail.com
+EMAIL_HOST=smtp.mail.me.com
 EMAIL_PORT=587
 EMAIL_USER=cpbjr@mac.com
 EMAIL_PASS=zqsb-fzbq-mmmh-jkjn

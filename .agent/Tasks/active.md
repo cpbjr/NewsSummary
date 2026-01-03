@@ -1,13 +1,6 @@
 # Active Tasks
 
-**Last Updated**: 2026-01-02 19:00
-
----
-
-## Issues Reported
-
-* [x] **Issue #1**: Delivery is broken. ([URL](https://github.com/cpbjr/NewsSummary/issues/1)) ✅
-  > Zerohedge is rarely delivered. Want to have multiple sources for Dodgers, tech, and general news.
+**Last Updated**: 2026-01-02 20:01
 
 ---
 

@@ -304,7 +304,7 @@ def format_html_digest(grouped: dict, digest_name: str) -> str:
 def send_email(html: str, subject: str):
     """Send email digest via SMTP."""
     # Get credentials from environment
-    smtp_host = os.environ.get("EMAIL_HOST", "smtp.gmail.com")
+    smtp_host = os.environ.get("EMAIL_HOST", "smtp.mail.me.com")
     smtp_port = int(os.environ.get("EMAIL_PORT", "587"))
     smtp_user = os.environ.get("EMAIL_USER")
     smtp_pass = os.environ.get("EMAIL_PASS")
@@ -352,9 +352,9 @@ def main():
         digest_type = "evening"
 
     names = {
-        "morning": "Morning Digest",
-        "noon": "Noon Digest",
-        "evening": "Evening Digest"
+        "morning": "Morning",
+        "noon": "Noon",
+        "evening": "Evening"
     }
     digest_name = names.get(digest_type, "News Digest")
 

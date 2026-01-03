@@ -243,7 +243,12 @@ def preview_digest():
         grouped = group_by_category(articles, config.get('settings', {}).get('max_per_category', 12))
 
         # Format
-        digest_name = "Morning Digest Preview" if digest_type == 'morning' else "Evening Digest Preview"
+        if digest_type == 'morning':
+            digest_name = "Morning Preview"
+        elif digest_type == 'noon':
+            digest_name = "Noon Preview"
+        else:
+            digest_name = "Evening Preview"
         html = format_html_digest(grouped, digest_name)
 
         total_articles = sum(len(v) for v in grouped.values())
