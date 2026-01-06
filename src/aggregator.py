@@ -344,8 +344,8 @@ def format_html_digest(grouped: dict, digest_name: str, trends: list = None) -> 
 </head>
 <body>
     <div class="header">
-        <h1>{digest_name}</h1>
-        <p>{datetime.now().strftime('%A, %B %d, %Y')}</p>
+        <h1>Christopher's News Summary</h1>
+        <p>{digest_name} &bull; {datetime.now().strftime('%A, %B %d, %Y')}</p>
     </div>
     <div class="content">
 """
