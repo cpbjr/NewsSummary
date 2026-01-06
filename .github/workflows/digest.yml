@@ -1,18 +1,17 @@
 name: News Digest
 
-# on:
-#   schedule:
-#     # 6 AM MT = 13:00 UTC
-#     - cron: '0 13 * * *'
-#     # 12 PM MT = 19:00 UTC
-#     - cron: '0 19 * * *'
-#     # 6 PM MT = 01:00 UTC
-#     - cron: '0 1 * * *'
 on:
+  schedule:
+    # 6 AM MT = 13:00 UTC
+    - cron: '0 13 * * *'
+    # 12 PM MT = 19:00 UTC
+    - cron: '0 19 * * *'
+    # 6 PM MT = 01:00 UTC
+    - cron: '0 1 * * *'
   workflow_dispatch:
     inputs:
       digest_type:
-        description: 'Digest type (morning/noon/evening)'
+        description: 'Digest type (morning/afternoon/evening)'
         required: false
         default: 'morning'
 
@@ -35,15 +34,10 @@ jobs:
       - name: Determine digest type
         id: digest
         run: |
-          HOUR=$(TZ='America/Denver' date +%H)
           if [ "${{ github.event.inputs.digest_type }}" != "" ]; then
             echo "type=${{ github.event.inputs.digest_type }}" >> $GITHUB_OUTPUT
-          elif [ $HOUR -lt 11 ]; then
-            echo "type=morning" >> $GITHUB_OUTPUT
-          elif [ $HOUR -lt 16 ]; then
-            echo "type=noon" >> $GITHUB_OUTPUT
           else
-            echo "type=evening" >> $GITHUB_OUTPUT
+            echo "type=" >> $GITHUB_OUTPUT
           fi
 
       - name: Run aggregator
@@ -53,7 +47,13 @@ jobs:
           EMAIL_USER: ${{ secrets.EMAIL_USER }}
           EMAIL_PASS: ${{ secrets.EMAIL_PASS }}
           EMAIL_TO: ${{ secrets.EMAIL_TO }}
-        run: python src/aggregator.py ${{ steps.digest.outputs.type }}
+          SERPER_API_KEY: ${{ secrets.SERPER_API_KEY }}
+        run: |
+          if [ "${{ steps.digest.outputs.type }}" != "" ]; then
+            python src/aggregator.py ${{ steps.digest.outputs.type }}
+          else
+            python src/aggregator.py
+          fi
 
       - name: Upload digest artifact
         if: always()

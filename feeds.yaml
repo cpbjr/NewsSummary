@@ -16,10 +16,6 @@ settings:
     josh_allen: 5
     general: 10
 feeds:
-- name: Josh Allen Search
-  url: https://news.google.com/rss/search?q=Josh+Allen&hl=en-US&gl=US&ceid=US:en
-  category: josh_allen
-  weight: 2.0
 # Individual Feed Categories (shown first in digest)
 - name: ZeroHedge
   url: https://cms.zerohedge.com/fullrss2.xml

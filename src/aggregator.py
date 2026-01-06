@@ -10,6 +10,7 @@ import sys
 import yaml
 import hashlib
 import smtplib
+import requests
 import feedparser
 from datetime import datetime, timedelta
 from email.mime.text import MIMEText
@@ -150,17 +151,72 @@ def filter_articles(articles: list, keywords: dict) -> list:
         elif josh_allen_pattern.search(text):
             article["category"] = "josh_allen"
 
-        # Calculate score
+        # Update score - preserve higher existing scores (like from Search API)
         score = 0
         if any(p.search(text) for p in priority_patterns):
             score += 100
         if any(p.search(text) for p in interest_patterns):
             score += 50
 
-        article["score"] = score
+        article["score"] = max(article.get("score", 0), score)
         filtered.append(article)
 
     return filtered
+
+
+def search_news(query: str, limit: int = 5) -> list:
+    """Fetch news from Serper.dev News API."""
+    api_key = os.environ.get("SERPER_API_KEY")
+    if not api_key:
+        print("SERPER_API_KEY not found. Skipping news search.")
+        return []
+
+    url = "https://google.serper.dev/news"
+    payload = {
+        "q": query,
+        "num": limit,
+        "tbs": "qdr:d"  # Published in the last 24 hours
+    }
+    headers = {
+        'X-API-KEY': api_key,
+        'Content-Type': 'application/json'
+    }
+
+    try:
+        response = requests.post(url, headers=headers, json=payload, timeout=10)
+        response.raise_for_status()
+        results = response.json().get("news", [])
+        
+        articles = []
+        for entry in results[:limit]:
+            # Convert Serper date (e.g. "3 hours ago" or "Jan 1, 2024")
+            # For simplicity, we'll use current time if it's relative
+            date_str = entry.get("date", "")
+            if "hour" in date_str or "minute" in date_str or "moment" in date_str:
+                date = datetime.now()
+            else:
+                try:
+                    # Very basic date parsing if needed, but Serper usually gives relative
+                    date = datetime.now() 
+                except:
+                    date = datetime.now()
+
+            article = {
+                "title": entry.get("title", ""),
+                "link": entry.get("link", ""),
+                "summary": entry.get("snippet", ""),
+                "source": entry.get("source", "Google News Search"),
+                "category": "josh_allen",
+                "date": date,
+                "score": 200, # High priority
+                "image_url": entry.get("imageUrl")
+            }
+            articles.append(article)
+        
+        return articles
+    except Exception as e:
+        print(f"Error searching news for '{query}': {e}")
+        return []
 
 
 def group_by_category(articles: list, default_limit: int = 12, category_limits: dict = None) -> dict:
@@ -258,9 +314,14 @@ def format_html_digest(grouped: dict, digest_name: str) -> str:
     }
 
     # Sort categories (individual feeds first, then general news, then other categories)
-    cat_order = ["zerohedge", "federalist", "dodgers", "general", "finance", "politics", "tech", "world", "sports"]
+    # Sports moved to the bottom: Sports -> Dodgers -> Josh Allen
+    cat_order = ["zerohedge", "federalist", "general", "finance", "politics", "tech", "world", "sports", "dodgers", "josh_allen"]
+    
+    # Add any remaining categories not explicitly in the order
+    remaining_cats = sorted([c for c in grouped.keys() if c not in cat_order])
+    full_order = cat_order + remaining_cats
 
-    for cat in cat_order:
+    for cat in full_order:
         if cat not in grouped:
             continue
         articles = grouped[cat]
@@ -341,19 +402,39 @@ def send_email(html: str, subject: str):
 def main():
     """Main entry point."""
     # Determine digest type from args or time
+    # Use Mountain Time (America/Denver) for hour check
+    # UTC-7 (no DST correction for simplicity, or use offset)
+    # Better: check if we are in GitHub or local and adjust
+    
+    # Load config for timezone setting
+    config = load_config()
+    settings = config.get("settings", {})
+    tz_name = settings.get("timezone", "America/Denver")
+    
+    # For simplicity without pytz, we estimate Mountain Time offset (-7)
+    # A more robust way is to use the environment variable TZ if on Linux
+    try:
+        import time
+        if hasattr(time, 'tzset'):
+            os.environ['TZ'] = tz_name
+            time.tzset()
+    except:
+        pass
+
     hour = datetime.now().hour
+    
     if len(sys.argv) > 1:
-        digest_type = sys.argv[1]
+        digest_type = sys.argv[1].lower()
     elif hour < 11:
         digest_type = "morning"
     elif hour < 16:
-        digest_type = "noon"
+        digest_type = "afternoon"
     else:
         digest_type = "evening"
 
     names = {
         "morning": "Morning",
-        "noon": "Noon",
+        "afternoon": "Afternoon",
         "evening": "Evening"
     }
     digest_name = names.get(digest_type, "News Digest")
@@ -367,7 +448,14 @@ def main():
     # Fetch feeds
     print(f"Fetching {len(config['feeds'])} feeds...")
     articles = fetch_all_feeds(config["feeds"])
-    print(f"Fetched {len(articles)} articles")
+    
+    # NEW: Fetch Josh Allen via Search API
+    print("Searching for Josh Allen updates via API...")
+    search_articles = search_news("Josh Allen", limit=5)
+    print(f"Search API returned {len(search_articles)} articles")
+    articles.extend(search_articles)
+
+    print(f"Total fetched {len(articles)} articles")
 
     # Filter by recent (dynamic window)
     # Morning: 12h (6pm-6am), Noon: 6h (6am-12pm), Evening: 6h (12pm-6pm)
@@ -394,15 +482,21 @@ def main():
         settings.get("category_limits", {})
     )
     
-    # Print category counts for debug
+    # Print summary for debug
+    print("\n--- Digest Summary ---")
+    josh_count = len(grouped.get("josh_allen", []))
+    print(f"Josh Allen Articles: {josh_count}")
+    
     for cat, items in grouped.items():
-        print(f"Category '{cat}': {len(items)} articles")
+        if cat != "josh_allen":
+            print(f"Category '{cat}': {len(items)} articles")
+    print("----------------------\n")
 
     # Format HTML
     html = format_html_digest(grouped, digest_name)
 
     # Send email
-    subject = f"{digest_name} - {datetime.now().strftime('%b %d, %Y')}"
+    subject = f"{digest_name} News Summary - {datetime.now().strftime('%b %d, %Y')}"
     send_email(html, subject)
 
     print("Done!")
