@@ -334,7 +334,10 @@ def format_html_digest(grouped: dict, digest_name: str, trends: list = None) -> 
             font-size: 12px; 
             font-weight: 600;
             white-space: nowrap;
+            text-decoration: none;
+            transition: background 0.2s;
         }}
+        .trend-pill:hover {{ background: #e2e8f0; color: #0f172a; }}
         
         .footer {{ text-align: center; padding: 40px 20px; font-size: 11px; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.1em; }}
     </style>
@@ -402,7 +405,9 @@ def format_html_digest(grouped: dict, digest_name: str, trends: list = None) -> 
     if trends:
         html += '<div class="trends-container"><div class="trends-title">Trending on X</div><div class="trends-list">'
         for trend in trends:
-            html += f'<div class="trend-pill">{trend}</div>'
+            # URL encode the trend for the link
+            encoded_trend = trend.replace("#", "%23").replace(" ", "%20")
+            html += f'<a href="https://x.com/search?q={encoded_trend}" class="trend-pill">{trend}</a>'
         html += '</div></div>'
 
     total = sum(len(v) for v in grouped.values())
