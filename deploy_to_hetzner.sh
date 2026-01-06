@@ -69,9 +69,9 @@ EOF
 # 6. Configure Cron Jobs (Mountain Time)
 echo "📅 Configuring cron jobs on server..."
 ssh $SERVER << 'ENDSSH'
-(crontab -l | grep -v "src/aggregator.py" ; echo "0 6 * * * cd /var/www/newssummary && ./venv/bin/python src/aggregator.py morning >> /var/log/newssummary_cron.log 2>&1") | crontab -
-(crontab -l | grep -v "noon" ; echo "0 12 * * * cd /var/www/newssummary && ./venv/bin/python src/aggregator.py noon >> /var/log/newssummary_cron.log 2>&1") | crontab -
-(crontab -l | grep -v "evening" ; echo "0 18 * * * cd /var/www/newssummary && ./venv/bin/python src/aggregator.py evening >> /var/log/newssummary_cron.log 2>&1") | crontab -
+(crontab -l | grep -v "src/aggregator.py" ; echo "0 13 * * * cd /var/www/newssummary && ./venv/bin/python src/aggregator.py morning >> /var/log/newssummary_cron.log 2>&1") | crontab -
+(crontab -l | grep -v "noon" ; echo "0 19 * * * cd /var/www/newssummary && ./venv/bin/python src/aggregator.py noon >> /var/log/newssummary_cron.log 2>&1") | crontab -
+(crontab -l | grep -v "evening" ; echo "0 1 * * * cd /var/www/newssummary && ./venv/bin/python src/aggregator.py evening >> /var/log/newssummary_cron.log 2>&1") | crontab -
 sudo touch /var/log/newssummary_cron.log && sudo chown deploy:deploy /var/log/newssummary_cron.log
 ENDSSH
 
