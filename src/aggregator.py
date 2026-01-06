@@ -233,8 +233,35 @@ def group_by_category(articles: list, default_limit: int = 12, category_limits: 
     return dict(groups)
 
 
-def format_html_digest(grouped: dict, digest_name: str) -> str:
+def fetch_trending_topics() -> list:
+    """Fetch current trending topics on X/Twitter via Serper Search."""
+    api_key = os.environ.get("SERPER_API_KEY")
+    if not api_key:
+        return []
+
+    url = "https://google.serper.dev/search"
+    payload = {"q": "trending on twitter now USA", "num": 5}
+    headers = {"X-API-KEY": api_key, "Content-Type": "application/json"}
+
+    try:
+        response = requests.post(url, headers=headers, json=payload, timeout=10)
+        data = response.json()
+        snippet = data.get("organic", [{}])[0].get("snippet", "")
+        
+        # Extract trends (usually looks like "Trends: #Trend1, #Trend2...")
+        if ":" in snippet:
+            trends_part = snippet.split(":", 1)[1]
+            # Split by comma or space and clean up
+            trends = [t.strip().rstrip(".").rstrip(",") for t in re.split(r",|\s", trends_part)]
+            return [t for t in trends if t and len(t) > 2][:10]
+        return []
+    except:
+        return []
+
+
+def format_html_digest(grouped: dict, digest_name: str, trends: list = None) -> str:
     """Format articles as HTML email."""
+    trends = trends or []
     html = f"""
 <!DOCTYPE html>
 <html>
@@ -246,7 +273,7 @@ def format_html_digest(grouped: dict, digest_name: str) -> str:
         .header h1 {{ margin: 0; font-family: 'Playfair Display', serif; font-size: 32px; letter-spacing: -0.02em; }}
         .header p {{ margin: 10px 0 0; opacity: 0.7; font-size: 13px; text-transform: uppercase; letter-spacing: 0.2em; font-weight: 600; }}
         
-        .content {{ background: white; padding: 30px; border-radius: 0 0 12px 12px; shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1); }}
+        .content {{ background: white; padding: 30px; border-radius: 0 0 12px 12px; box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1); }}
         
         .category {{ margin-top: 40px; }}
         .category:first-child {{ margin-top: 0; }}
@@ -287,6 +314,27 @@ def format_html_digest(grouped: dict, digest_name: str) -> str:
         }}
         
         .article .summary {{ font-size: 14px; color: #475569; line-height: 1.6; }}
+
+        /* Trending Section */
+        .trends-container {{ margin-top: 40px; padding-top: 25px; border-top: 2px solid #f1f5f9; }}
+        .trends-title {{ 
+            font-family: 'Playfair Display', serif; 
+            font-size: 16px; 
+            color: #0f172a; 
+            margin-bottom: 15px; 
+            font-variant: small-caps; 
+            letter-spacing: 0.05em;
+        }}
+        .trends-list {{ display: flex; flex-wrap: wrap; gap: 8px; }}
+        .trend-pill {{ 
+            background: #f1f5f9; 
+            color: #475569; 
+            padding: 6px 12px; 
+            border-radius: 20px; 
+            font-size: 12px; 
+            font-weight: 600;
+            white-space: nowrap;
+        }}
         
         .footer {{ text-align: center; padding: 40px 20px; font-size: 11px; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.1em; }}
     </style>
@@ -309,13 +357,14 @@ def format_html_digest(grouped: dict, digest_name: str) -> str:
         "sports": "Sports",
         "opinion": "Opinion & Commentary",
         "josh_allen": "Josh Allen Updates",
+        "special": "Special Interest",
         "general": "General News",
         "world": "World News",
     }
 
-    # Sort categories (individual feeds first, then general news, then other categories)
-    # Sports moved to the bottom: Sports -> Dodgers -> Josh Allen
-    cat_order = ["zerohedge", "federalist", "general", "finance", "politics", "tech", "world", "sports", "dodgers", "josh_allen"]
+    # Sort categories
+    # Order: News -> Sports -> Dodgers -> Josh Allen -> Special Search
+    cat_order = ["zerohedge", "federalist", "general", "finance", "politics", "tech", "world", "sports", "dodgers", "josh_allen", "special"]
     
     # Add any remaining categories not explicitly in the order
     remaining_cats = sorted([c for c in grouped.keys() if c not in cat_order])
@@ -348,6 +397,13 @@ def format_html_digest(grouped: dict, digest_name: str) -> str:
             '''
 
         html += '</div>'
+
+    # Add Trending Section at the bottom if available
+    if trends:
+        html += '<div class="trends-container"><div class="trends-title">Trending on X</div><div class="trends-list">'
+        for trend in trends:
+            html += f'<div class="trend-pill">{trend}</div>'
+        html += '</div></div>'
 
     total = sum(len(v) for v in grouped.values())
     html += f"""
@@ -455,6 +511,18 @@ def main():
     print(f"Search API returned {len(search_articles)} articles")
     articles.extend(search_articles)
 
+    # NEW: Fetch Special Search
+    print("Searching for Special Interest...")
+    special_articles = search_news("thick OR thicc latinas", limit=3)
+    for a in special_articles: a["category"] = "special"
+    print(f"Special Search returned {len(special_articles)} articles")
+    articles.extend(special_articles)
+
+    # NEW: Fetch Twitter Trends
+    print("Fetching Twitter Trends...")
+    trends = fetch_trending_topics()
+    print(f"Fetched {len(trends)} trends")
+
     print(f"Total fetched {len(articles)} articles")
 
     # Filter by recent (dynamic window)
@@ -493,7 +561,7 @@ def main():
     print("----------------------\n")
 
     # Format HTML
-    html = format_html_digest(grouped, digest_name)
+    html = format_html_digest(grouped, digest_name, trends=locals().get('trends', []))
 
     # Send email
     subject = f"{digest_name} News Summary - {datetime.now().strftime('%b %d, %Y')}"
