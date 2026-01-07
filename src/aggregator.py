@@ -52,7 +52,7 @@ def fetch_feed(feed_config: dict) -> list:
             elif hasattr(entry, "updated_parsed") and entry.updated_parsed:
                 article["date"] = datetime(*entry.updated_parsed[:6])
             else:
-                article["date"] = datetime.now()
+                article["date"] = datetime.utcnow()
 
             # Image extraction
             image_url = None
@@ -193,13 +193,13 @@ def search_news(query: str, limit: int = 5) -> list:
             # For simplicity, we'll use current time if it's relative
             date_str = entry.get("date", "")
             if "hour" in date_str or "minute" in date_str or "moment" in date_str:
-                date = datetime.now()
+                date = datetime.utcnow()
             else:
                 try:
                     # Very basic date parsing if needed, but Serper usually gives relative
-                    date = datetime.now() 
+                    date = datetime.utcnow() 
                 except:
-                    date = datetime.now()
+                    date = datetime.utcnow()
 
             article = {
                 "title": entry.get("title", ""),
@@ -482,19 +482,27 @@ def main():
     except:
         pass
 
-    hour = datetime.now().hour
+    now = datetime.utcnow()
+    hour = now.hour
     
     if len(sys.argv) > 1:
         digest_type = sys.argv[1].lower()
-    elif hour < 11:
-        digest_type = "morning"
-    elif hour < 16:
-        digest_type = "afternoon"
+    elif hour >= 11 and hour < 14:  # 5a-8a MT is roughly 12-15 UTC
+        # This detection is tricky without knowing the exact cron trigger relation
+        # but if we are running at 13 UTC (6 AM MT), 19 UTC (12 PM MT), 1 UTC (6 PM MT)
+        # 13 UTC: morning
+        # 19 UTC: noon
+        # 1 UTC: evening
+        digest_type = "morning" if hour == 13 else ("noon" if hour == 19 else "evening")
     else:
-        digest_type = "evening"
+        # Fallback based on UTC hours
+        if hour >= 11 and hour < 16: digest_type = "morning"
+        elif hour >= 16 and hour < 22: digest_type = "noon"
+        else: digest_type = "evening"
 
     names = {
         "morning": "Morning",
+        "noon": "Noon",
         "afternoon": "Afternoon",
         "evening": "Evening"
     }
@@ -533,7 +541,7 @@ def main():
     # Filter by recent (dynamic window)
     # Morning: 12h (6pm-6am), Noon: 6h (6am-12pm), Evening: 6h (12pm-6pm)
     hours_back = 12 if digest_type == "morning" else 6
-    cutoff = datetime.now() - timedelta(hours=hours_back)
+    cutoff = datetime.utcnow() - timedelta(hours=hours_back)
     articles = [a for a in articles if a["date"] > cutoff]
     print(f"Recent articles (last {hours_back}h): {len(articles)}")
 
