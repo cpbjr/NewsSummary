@@ -27,6 +27,7 @@ EMAIL_PASS=zqsb-fzbq-mmmh-jkjn
 EMAIL_TO=cpbjr@mac.com
 PORT=5001
 ADMIN_PASSWORD=admin123
+SERPER_API_KEY=f9eb00ce4a66cca00a387ec7c5e4e153533501c4
 EOF
 chmod 600 /var/www/newssummary/.env
 ENDSSH
