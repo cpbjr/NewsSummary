@@ -123,6 +123,39 @@ def deduplicate(articles: list, threshold: float = 0.85) -> list:
     return unique
 
 
+
+def extract_og_image(url: str) -> str:
+    """Fetch article and extract OpenGraph/Twitter image URL."""
+    try:
+        response = requests.get(url, headers={"User-Agent": "NewsSummary/1.0"}, timeout=5)
+        response.raise_for_status()
+        text = response.text
+        
+        # Priority: og:image, twitter:image, schema.org image
+        patterns = [
+            r'property="og:image"\s+content="([^"]+)"',
+            r'content="([^"]+)"\s+property="og:image"',
+            r'name="twitter:image"\s+content="([^"]+)"',
+            r'content="([^"]+)"\s+name="twitter:image"',
+            r'<img[^>]+src=["\']([^"\']+)["\']'
+        ]
+        
+        for pattern in patterns:
+            match = re.search(pattern, text, re.IGNORECASE)
+            if match:
+                img_url = match.group(1)
+                # Ensure it's absolute
+                if img_url.startswith('//'):
+                    img_url = f"https:{img_url}"
+                elif img_url.startswith('/'):
+                    from urllib.parse import urljoin
+                    img_url = urljoin(url, img_url)
+                return img_url
+        return None
+    except:
+        return None
+
+
 def filter_articles(articles: list, keywords: dict) -> list:
     """Filter articles based on keyword rules and recategorize based on keywords."""
     filtered = []
@@ -209,9 +242,21 @@ def search_news(query: str, limit: int = 5) -> list:
                 "category": "josh_allen",
                 "date": date,
                 "score": 200, # High priority
-                "image_url": entry.get("imageUrl")
+                "image_url": entry.get("imageUrl") # Fallback thumbnail
             }
             articles.append(article)
+        
+        # Parallel extraction of high-res images
+        with ThreadPoolExecutor(max_workers=len(articles) if articles else 1) as executor:
+            future_to_article = {executor.submit(extract_og_image, a["link"]): a for a in articles}
+            for future in as_completed(future_to_article):
+                article = future_to_article[future]
+                try:
+                    high_res = future.result()
+                    if high_res:
+                        article["image_url"] = high_res
+                except:
+                    pass
         
         return articles
     except Exception as e:
@@ -233,35 +278,51 @@ def group_by_category(articles: list, default_limit: int = 12, category_limits: 
     return dict(groups)
 
 
-def fetch_trending_topics() -> list:
-    """Fetch current trending topics on X/Twitter via Serper Search."""
-    api_key = os.environ.get("SERPER_API_KEY")
-    if not api_key:
-        return []
 
-    url = "https://google.serper.dev/search"
-    payload = {"q": "trending on twitter now USA", "num": 5}
-    headers = {"X-API-KEY": api_key, "Content-Type": "application/json"}
-
+def fetch_historical_events() -> list:
+    """Fetch 'On This Day' events from Wikipedia REST API and filter for 1972/1992."""
+    now = datetime.utcnow()
+    month = now.strftime("%m")
+    day = now.strftime("%d")
+    url = f"https://en.wikipedia.org/api/rest_v1/feed/onthisday/events/{month}/{day}"
+    
     try:
-        response = requests.post(url, headers=headers, json=payload, timeout=10)
+        response = requests.get(url, headers={"User-Agent": "NewsSummary/1.0 (contact: cpbjr@mac.com)"}, timeout=10)
+        response.raise_for_status()
         data = response.json()
-        snippet = data.get("organic", [{}])[0].get("snippet", "")
+        events = data.get("events", [])
         
-        # Extract trends (usually looks like "Trends: #Trend1, #Trend2...")
-        if ":" in snippet:
-            trends_part = snippet.split(":", 1)[1]
-            # Split by comma or space and clean up
-            trends = [t.strip().rstrip(".").rstrip(",") for t in re.split(r",|\s", trends_part)]
-            return [t for t in trends if t and len(t) > 2][:10]
-        return []
-    except:
+        # 1. Separate events into "Target Years" (1972, 1992) and "Other Years"
+        target_years = [1972, 1992]
+        target_pool = [e for e in events if e.get("year") in target_years]
+        other_pool = [e for e in events if e.get("year") not in target_years]
+        
+        selected = []
+        
+        # 2. Pick one from target pool if available
+        if target_pool:
+            import random
+            selected.append(random.choice(target_pool))
+        
+        # 3. Pick remaining from other pool to reach 3 total
+        import random
+        needed = 3 - len(selected)
+        if len(other_pool) > needed:
+            # Sort by "importance" if possible, but Wikipedia API doesn't really rank them well.
+            # We'll just pick random or first few.
+            selected.extend(random.sample(other_pool, needed))
+        else:
+            selected.extend(other_pool)
+            
+        return selected
+    except Exception as e:
+        print(f"Error fetching historical events: {e}")
         return []
 
 
-def format_html_digest(grouped: dict, digest_name: str, trends: list = None) -> str:
+def format_html_digest(grouped: dict, digest_name: str, historical_events: list = None) -> str:
     """Format articles as HTML email."""
-    trends = trends or []
+    historical_events = historical_events or []
     html = f"""
 <!DOCTYPE html>
 <html>
@@ -401,14 +462,23 @@ def format_html_digest(grouped: dict, digest_name: str, trends: list = None) -> 
 
         html += '</div>'
 
-    # Add Trending Section at the bottom if available
-    if trends:
-        html += '<div class="trends-container"><div class="trends-title">Trending on X</div><div class="trends-list">'
-        for trend in trends:
-            # URL encode the trend for the link
-            encoded_trend = trend.replace("#", "%23").replace(" ", "%20")
-            html += f'<a href="https://x.com/search?q={encoded_trend}" class="trend-pill">{trend}</a>'
-        html += '</div></div>'
+
+    # Add Historical Context Section if available
+    if historical_events:
+        html += '<div class="trends-container"><div class="trends-title">On This Day</div>'
+        for event in historical_events:
+            year = event.get("year")
+            text = event.get("text", "")
+            # Grokipedia link: https://grokipedia.com/query?q=[Event+Text+Shortened]
+            search_query = f"{year} {text[:50]}".replace(" ", "+")
+            html += f'''
+            <div style="margin-bottom: 12px; font-size: 14px; line-height: 1.5;">
+                <span style="font-weight: 600; color: #3b82f6;">{year}</span>: {text}
+                <br>
+                <a href="https://grokipedia.com/query?q={search_query}" style="font-size: 11px; color: #64748b; text-decoration: none; font-weight: 600; text-transform: uppercase;">&rarr; Learn More on Grokipedia</a>
+            </div>
+            '''
+        html += '</div>'
 
     total = sum(len(v) for v in grouped.values())
     html += f"""
@@ -531,10 +601,13 @@ def main():
     print(f"Special Search returned {len(special_articles)} articles")
     articles.extend(special_articles)
 
-    # NEW: Fetch Twitter Trends
-    print("Fetching Twitter Trends...")
-    trends = fetch_trending_topics()
-    print(f"Fetched {len(trends)} trends")
+
+    # NEW: Fetch Historical Events for morning digest
+    historical_events = []
+    if digest_type == "morning":
+        print("Fetching Historical Events...")
+        historical_events = fetch_historical_events()
+        print(f"Fetched {len(historical_events)} events")
 
     print(f"Total fetched {len(articles)} articles")
 
@@ -574,7 +647,7 @@ def main():
     print("----------------------\n")
 
     # Format HTML
-    html = format_html_digest(grouped, digest_name, trends=locals().get('trends', []))
+    html = format_html_digest(grouped, digest_name, historical_events=historical_events)
 
     # Send email
     subject = f"{digest_name} News Summary - {datetime.now().strftime('%b %d, %Y')}"

@@ -1,14 +1,21 @@
 # Active Tasks
 
-**Last Updated**: 2026-01-07 07:05
+**Last Updated**: 2026-01-10 09:33
 
 ---
 
 ## Currently Working On
 
-- [ ] **Better AI Feed**: Replace The Verge AI with tutorial-focused source (Moved from planned)
+- [ ] *No active tasks. Use /startwork or add a new task from planned.md*
 
 ---
+
+## Issues Reported
+
+- [ ] *No active issues.*
+
+---
+
 
 ## Template: Active Task Entry
 

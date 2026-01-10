@@ -53,3 +53,32 @@
 - [ ] 3.1 Review 7 days of digests
 - [ ] 3.2 Note any missing topics or excessive noise
 - [ ] 3.3 Adjust feeds.yaml as needed
+
+---
+
+## 4. Robust X/Twitter Feed Reimplementation
+**Priority**: MEDIUM
+**Estimated**: 1 hour
+**Dependencies**: None
+
+**Goal**: Restore trending topics with better parsing logic.
+
+**Technical Notes**:
+- Previous implementation used Serper Search which returned split tokens (e.g., "Charlie", "Kirk") and UI noise.
+- Future implementation should use an API that provides full trending topics (n-grams) or a more sophisticated cleaner.
+- Filter out tokens like "Explore", "more", "Trending", "X".
+
+---
+
+## 5. Morning Historical Context
+**Priority**: HIGH
+**Estimated**: 45 minutes
+**Dependencies**: Wikipedia API
+
+**Goal**: Add "On This Day" section to morning emails.
+
+**Requirements**:
+- Fetch events from Wikipedia REST API.
+- Filter for years 1972 or 1992.
+- Display 3 events with Grokipedia links.
+
