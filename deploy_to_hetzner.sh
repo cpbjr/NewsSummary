@@ -4,7 +4,7 @@ set -e
 
 SERVER="whitepine"
 REMOTE_PATH="/var/www/newssummary"
-LOCAL_PATH="/home/cpbjr/Documents/AI_Automation/Projects/NewsSummary"
+LOCAL_PATH="/home/cpbjr/WhitePineTech/Projects/NewsSummary"
 
 echo "🚀 Starting migration to Hetzner ($SERVER)..."
 
@@ -67,15 +67,13 @@ systemctl enable newssummary-admin
 systemctl restart newssummary-admin
 EOF
 
-# 6. Configure Cron Jobs (Mountain Time)
+# 6. Configure Cron Jobs (Mountain Time — DST-aware via wrapper)
 echo "📅 Configuring cron jobs on server..."
-ssh $SERVER << 'ENDSSH'
-(crontab -l | grep -v "src/aggregator.py" ; echo "0 13 * * * cd /var/www/newssummary && ./venv/bin/python src/aggregator.py morning >> /var/log/newssummary_cron.log 2>&1") | crontab -
-(crontab -l | grep -v "noon" ; echo "0 19 * * * cd /var/www/newssummary && ./venv/bin/python src/aggregator.py noon >> /var/log/newssummary_cron.log 2>&1") | crontab -
-(crontab -l | grep -v "evening" ; echo "0 1 * * * cd /var/www/newssummary && ./venv/bin/python src/aggregator.py evening >> /var/log/newssummary_cron.log 2>&1") | crontab -
-sudo touch /var/log/newssummary_cron.log && sudo chown deploy:deploy /var/log/newssummary_cron.log
-ENDSSH
+scp run_digest.sh $SERVER:/var/www/newssummary/run_digest.sh
+ssh $SERVER "chmod +x /var/www/newssummary/run_digest.sh"
+ssh $SERVER "(crontab -l | grep -v 'aggregator.py\|run_digest' ; echo '0 * * * * /var/www/newssummary/run_digest.sh') | crontab -"
+ssh $SERVER "sudo touch /var/log/newssummary_cron.log && sudo chown deploy:deploy /var/log/newssummary_cron.log"
 
 echo "✅ Migration complete!"
 echo "📡 Admin Panel: http://5.78.128.255:5001"
-echo "🕒 Cron Jobs set for 6a, 12p, 6p MT"
+echo "🕒 Cron: hourly wrapper checks MT time (DST-aware) — runs at 6a, 12p, 6p MT"
