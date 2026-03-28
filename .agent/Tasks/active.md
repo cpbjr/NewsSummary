@@ -1,12 +1,12 @@
 # Active Tasks
 
-**Last Updated**: 2026-01-10 09:33
+**Last Updated**: 2026-03-28
 
 ---
 
 ## Currently Working On
 
-- [ ] *No active tasks. Use /startwork or add a new task from planned.md*
+- [ ] Need to fix link to grokipedia so that search is properly formatted. currently takes the whole text of the event and attempts to search for it. 
 
 ---
 
