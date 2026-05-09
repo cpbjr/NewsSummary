@@ -13,7 +13,7 @@ ssh $SERVER "sudo mkdir -p $REMOTE_PATH && sudo chown -R deploy:deploy $REMOTE_P
 
 # 2. Sync files
 echo "📤 Syncing files to server..."
-rsync -avz --exclude='venv' --exclude='.git' --exclude='.github' --exclude='__pycache__' \
+rsync -avz --exclude='venv' --exclude='.git' --exclude='.github' --exclude='__pycache__' --exclude='.env' \
     $LOCAL_PATH/ $SERVER:$REMOTE_PATH/
 
 # 3. Create .env on server

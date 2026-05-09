@@ -1,6 +1,27 @@
 # Planned Tasks
 
-**Last Updated**: 2026-01-02
+**Last Updated**: 2026-03-28
+
+---
+
+## 6. Deploy Admin Dashboard to whitepine-tech.com (Hetzner)
+**Priority**: MEDIUM
+**Estimated**: 1-2 hours
+**Dependencies**: Working admin panel locally
+
+**Goal**: Deploy the Flask admin dashboard to the WhitePineTech Hetzner server so it's accessible via whitepine-tech.com.
+
+**Requirements**:
+- [ ] Run behind nginx reverse proxy (e.g., `news.whitepine-tech.com` or `/news-admin`)
+- [ ] Systemd service for auto-start on reboot
+- [ ] Environment variables / secrets secured on server
+- [ ] Auth/login enabled (already exists in admin panel)
+- [ ] SSL via Let's Encrypt
+
+**Technical Notes**:
+- Server: 5.78.128.255 (whitepine/whitepine-root SSH alias)
+- Admin panel is a Flask app in `admin-panel/`
+- Review `deploy_to_hetzner.sh` — may already have deployment scaffolding
 
 ---
 
