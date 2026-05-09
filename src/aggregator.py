@@ -265,7 +265,7 @@ def search_news(query: str, limit: int = 5) -> list:
         return []
 
 
-_STATE_FILE = "/home/buduser/.news_summary_state.json"
+_STATE_FILE = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), ".josh_allen_state.json")
 
 
 def load_josh_allen_state() -> dict:
@@ -660,18 +660,19 @@ def main():
     print(f"Fetching {len(config['feeds'])} feeds...")
     articles = fetch_all_feeds(config["feeds"])
     
-    # NEW: Fetch Josh Allen via Search API (limit=1 per send)
-    print("Searching for Josh Allen updates via API...")
-    search_articles = search_news("Josh Allen", limit=1)
-    print(f"Search API returned {len(search_articles)} articles")
-
-    # Deduplicate Josh Allen across sends within the same day
+    # Josh Allen: evening only, deduplicated across the day
+    josh_articles_to_use = []
     ja_state = load_josh_allen_state()
-    sent_urls = set(ja_state.get("sent_josh_allen_urls", []))
-    unseen = [a for a in search_articles if a["link"] not in sent_urls]
-    # Prefer unseen; fall back to already-sent if nothing new available
-    josh_articles_to_use = unseen if unseen else search_articles
-    articles.extend(josh_articles_to_use)
+    if digest_type == "evening":
+        print("Searching for Josh Allen updates via API...")
+        search_articles = search_news("Josh Allen", limit=5)
+        print(f"Search API returned {len(search_articles)} articles")
+        sent_urls = set(ja_state.get("sent_josh_allen_urls", []))
+        unseen = [a for a in search_articles if a["link"] not in sent_urls]
+        josh_articles_to_use = unseen if unseen else search_articles
+        articles.extend(josh_articles_to_use)
+    else:
+        print("Skipping Josh Allen search (evening only)")
 
     # NEW: Fetch Special Search
     print("Searching for Special Interest...")
