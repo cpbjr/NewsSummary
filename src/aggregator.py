@@ -7,6 +7,7 @@ Fetches RSS feeds, filters by keywords, deduplicates, and sends email digest.
 import os
 import re
 import sys
+import json
 import yaml
 import hashlib
 import smtplib
@@ -261,6 +262,77 @@ def search_news(query: str, limit: int = 5) -> list:
         return articles
     except Exception as e:
         print(f"Error searching news for '{query}': {e}")
+        return []
+
+
+_STATE_FILE = "/home/buduser/.news_summary_state.json"
+
+
+def load_josh_allen_state() -> dict:
+    today = datetime.utcnow().strftime("%Y-%m-%d")
+    try:
+        with open(_STATE_FILE) as f:
+            state = json.load(f)
+        if state.get("date") != today:
+            return {"date": today, "sent_josh_allen_urls": []}
+        return state
+    except (FileNotFoundError, json.JSONDecodeError):
+        return {"date": today, "sent_josh_allen_urls": []}
+
+
+def save_josh_allen_state(state: dict):
+    try:
+        with open(_STATE_FILE, "w") as f:
+            json.dump(state, f)
+    except Exception as e:
+        print(f"Warning: could not save state file: {e}")
+
+
+def fetch_latimes_dodgers() -> list:
+    """Fetch the latest Dodgers article from LA Times sports/dodgers page."""
+    url = "https://www.latimes.com/sports/dodgers"
+    try:
+        response = requests.get(
+            url,
+            headers={"User-Agent": "Mozilla/5.0 (compatible; NewsSummary/1.0)"},
+            timeout=10,
+        )
+        response.raise_for_status()
+        from bs4 import BeautifulSoup
+        soup = BeautifulSoup(response.text, "lxml")
+
+        # Find the first article link that looks like a Dodgers story
+        article_link = None
+        article_title = None
+        for a in soup.find_all("a", href=True):
+            href = a["href"]
+            # LA Times story URLs match /sports/dodgers/story/... or /sports/dodgers/...
+            if re.search(r'/sports/dodgers/(?:story/)?[\w-]', href):
+                text = a.get_text(strip=True)
+                if len(text) > 20:  # Skip nav/label links with short text
+                    article_link = href
+                    article_title = text
+                    break
+
+        if not article_link or not article_title:
+            print("LA Times: no Dodgers article found")
+            return []
+
+        if article_link.startswith("/"):
+            article_link = "https://www.latimes.com" + article_link
+
+        return [{
+            "title": article_title,
+            "link": article_link,
+            "summary": "",
+            "source": "Los Angeles Times",
+            "category": "dodgers",
+            "date": datetime.utcnow(),
+            "score": 300,
+            "image_url": None,
+        }]
+    except Exception as e:
+        print(f"Error fetching LA Times Dodgers: {e}")
         return []
 
 
@@ -588,11 +660,18 @@ def main():
     print(f"Fetching {len(config['feeds'])} feeds...")
     articles = fetch_all_feeds(config["feeds"])
     
-    # NEW: Fetch Josh Allen via Search API
+    # NEW: Fetch Josh Allen via Search API (limit=1 per send)
     print("Searching for Josh Allen updates via API...")
-    search_articles = search_news("Josh Allen", limit=5)
+    search_articles = search_news("Josh Allen", limit=1)
     print(f"Search API returned {len(search_articles)} articles")
-    articles.extend(search_articles)
+
+    # Deduplicate Josh Allen across sends within the same day
+    ja_state = load_josh_allen_state()
+    sent_urls = set(ja_state.get("sent_josh_allen_urls", []))
+    unseen = [a for a in search_articles if a["link"] not in sent_urls]
+    # Prefer unseen; fall back to already-sent if nothing new available
+    josh_articles_to_use = unseen if unseen else search_articles
+    articles.extend(josh_articles_to_use)
 
     # NEW: Fetch Special Search
     print("Searching for Special Interest...")
@@ -601,6 +680,11 @@ def main():
     print(f"Special Search returned {len(special_articles)} articles")
     articles.extend(special_articles)
 
+    # NEW: Fetch latest Dodgers article from LA Times
+    print("Fetching latest Dodgers article from LA Times...")
+    latimes_articles = fetch_latimes_dodgers()
+    print(f"LA Times returned {len(latimes_articles)} articles")
+    articles.extend(latimes_articles)
 
     # NEW: Fetch Historical Events for morning digest
     historical_events = []
@@ -652,6 +736,14 @@ def main():
     # Send email
     subject = f"{digest_name} News Summary - {datetime.now().strftime('%b %d, %Y')}"
     send_email(html, subject)
+
+    # Persist Josh Allen URLs that were sent today
+    for a in josh_articles_to_use:
+        url = a.get("link", "")
+        if url and url not in ja_state["sent_josh_allen_urls"]:
+            ja_state["sent_josh_allen_urls"].append(url)
+    ja_state["sent_josh_allen_urls"] = ja_state["sent_josh_allen_urls"][-5:]
+    save_josh_allen_state(ja_state)
 
     print("Done!")
 

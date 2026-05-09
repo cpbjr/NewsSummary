@@ -13,7 +13,7 @@ settings:
     sports: 8
     world: 10
     opinion: 8
-    josh_allen: 5
+    josh_allen: 1
     general: 10
 feeds:
 # Individual Feed Categories (shown first in digest)
